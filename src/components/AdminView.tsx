@@ -323,27 +323,27 @@ function AdminView() {
       {/* Stats Cards */}
       {stats && (
         <div className="admin-stats grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.total_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Total Users</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.active_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Active Users</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.country_office_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Country Office</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.lab_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Lab Team</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.osl_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">OSL Team</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.active_last_week}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Active (7 days)</div>
           </div>
@@ -390,7 +390,7 @@ function AdminView() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="search-input w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="neu-input w-full pl-10 pr-4 py-2 focus:outline-none"
               />
               <span className="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
             </div>
@@ -401,7 +401,7 @@ function AdminView() {
                 setRoleFilter(newRole); 
                 fetchUsers(1, { role: newRole || undefined }); 
               }}
-              className="filter-select px-4 py-2 bg-white border border-gray-200 rounded-lg"
+              className="neu-input px-4 py-2"
             >
               <option value="">All Roles</option>
               <option value="Super Admin">Super Admin</option>
@@ -416,19 +416,19 @@ function AdminView() {
                 setStatusFilter(newStatus); 
                 fetchUsers(1, { isActive: newStatus === '' ? undefined : newStatus === 'active' }); 
               }}
-              className="filter-select px-4 py-2 bg-white border border-gray-200 rounded-lg"
+              className="neu-input px-4 py-2"
             >
               <option value="">All Status</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
-            <button onClick={() => setShowCreateModal(true)} className="btn btn-primary px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
+            <button onClick={() => setShowCreateModal(true)} className="neu-btn-primary">
               + Create User
             </button>
           </div>
 
           {/* Users Table */}
-          <div className="admin-table-container bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="neu-flat overflow-hidden">
             {isLoading ? (
               <Loading />
             ) : (
@@ -555,7 +555,7 @@ function AdminView() {
       {/* Activity Logs Tab */}
       {activeTab === 'activity' && (
         <div className="admin-content">
-          <div className="admin-table-container bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="neu-flat overflow-hidden">
             {isLoading ? (
               <Loading />
             ) : (
@@ -608,7 +608,7 @@ function AdminView() {
 
       {/* Order Management Tab */}
       {activeTab === 'orders' && (
-        <div className="admin-content p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div className="neu-flat p-8">
           <div className="order-management-header mb-6">
             <h3 className="text-xl font-bold">Order History Management</h3>
             <p className="text-gray-500">

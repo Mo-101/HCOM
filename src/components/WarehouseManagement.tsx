@@ -56,7 +56,7 @@ function WarehouseManagement() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
-      <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+      <div className="neu-flat p-6 flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-black text-gray-800">Warehouse Management</h2>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Global Stock & Logistics Control</p>
@@ -69,10 +69,10 @@ function WarehouseManagement() {
               placeholder="Search locations..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-bold"
+              className="neu-input pl-10 pr-4 py-2"
             />
           </div>
-          <button className="p-2 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors">
+          <button className="neu-btn p-2">
             <Filter size={18} className="text-gray-600" />
           </button>
         </div>
@@ -89,7 +89,7 @@ function WarehouseManagement() {
                 key={warehouse.id}
                 whileHover={{ scale: 1.02 }}
                 onClick={() => setSelectedWarehouse(warehouse)}
-                className={`p-5 rounded-3xl cursor-pointer transition-all duration-300 border ${selectedWarehouse?.id === warehouse.id ? 'bg-blue-600 text-white border-blue-600 shadow-xl shadow-blue-100' : 'bg-white text-gray-800 border-gray-50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:border-blue-100'}`}
+                className={`p-5 cursor-pointer transition-all duration-300 ${selectedWarehouse?.id === warehouse.id ? 'neu-btn-primary text-white' : 'neu-flat text-gray-800'}`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className={`p-3 rounded-2xl ${selectedWarehouse?.id === warehouse.id ? 'bg-white/20' : 'bg-blue-50'}`}>
@@ -124,13 +124,13 @@ function WarehouseManagement() {
         {/* Inventory Details */}
         <div className="lg:col-span-2">
           {selectedWarehouse ? (
-            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+            <div className="neu-flat overflow-hidden">
               <div className="p-6 border-b border-gray-50 bg-gray-50/30 flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-black text-gray-800">Inventory: {selectedWarehouse.name}</h3>
                   <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Live Stock Levels</p>
                 </div>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold text-xs hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all">
+                <button className="neu-btn-primary px-4 py-2">
                   Request Transfer
                 </button>
               </div>
@@ -140,7 +140,7 @@ function WarehouseManagement() {
                   <div className="col-span-2 py-12"><Loading /></div>
                 ) : inventory.length > 0 ? (
                   inventory.map((item, i) => (
-                    <div key={i} className="p-4 bg-gray-50/50 rounded-2xl border border-gray-100 flex items-center gap-4 group hover:bg-white hover:shadow-lg transition-all duration-300">
+                    <div key={i} className="neu-pressed p-4 flex items-center gap-4 group hover:bg-white hover:shadow-lg transition-all duration-300">
                       <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
                         <Package size={24} />
                       </div>
@@ -176,7 +176,7 @@ function WarehouseManagement() {
               </div>
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl border-2 border-dashed border-gray-100 p-12 text-center">
+            <div className="h-full flex flex-col items-center justify-center neu-flat p-12 text-center">
               <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
                 <MapPin size={40} className="text-gray-200" />
               </div>

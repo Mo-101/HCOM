@@ -4,7 +4,7 @@ import { FlaskConical, Beaker, Activity, AlertCircle, CheckCircle2, Clock, Searc
 import Loading from './Loading';
 
 const LabStatCard = ({ label, value, icon: Icon, color }: { label: string, value: string, icon: any, color: string }) => (
-  <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 flex items-center gap-4">
+  <div className="neu-flat p-5 flex items-center gap-4">
     <div className={`p-3 rounded-2xl ${color}`}>
       <Icon size={24} className="text-white" />
     </div>
@@ -32,13 +32,13 @@ function LaboratoryView() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
-      <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+      <div className="neu-flat p-6 flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-black text-gray-800">Laboratory Control</h2>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Quality Assurance & Testing Dashboard</p>
         </div>
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold text-xs hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all flex items-center gap-2">
+          <button className="neu-btn-primary flex items-center gap-2">
             <FlaskConical size={16} />
             New Test Request
           </button>
@@ -53,7 +53,7 @@ function LaboratoryView() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+        <div className="lg:col-span-2 neu-flat overflow-hidden">
           <div className="p-6 border-b border-gray-50 flex justify-between items-center">
             <h3 className="text-lg font-black text-gray-800">Recent Test Queue</h3>
             <div className="flex gap-2">
@@ -62,7 +62,7 @@ function LaboratoryView() {
                 <input 
                   type="text" 
                   placeholder="Search tests..." 
-                  className="pl-9 pr-4 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
+                  className="neu-input pl-9 pr-4 py-1.5 w-48"
                 />
               </div>
             </div>
@@ -110,7 +110,7 @@ function LaboratoryView() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+          <div className="neu-flat p-6">
             <h3 className="text-lg font-black text-gray-800 mb-6">Equipment Status</h3>
             <div className="space-y-4">
               {[
@@ -119,7 +119,7 @@ function LaboratoryView() {
                 { name: 'Incubator I2', status: 'Operational', health: 92 },
                 { name: 'Microscope M1', status: 'Operational', health: 100 },
               ].map((eq, i) => (
-                <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                <div key={i} className="neu-pressed p-4">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-black text-gray-700">{eq.name}</span>
                     <span className={`text-[10px] font-black uppercase ${eq.status === 'Operational' ? 'text-emerald-500' : 'text-orange-500'}`}>
@@ -137,7 +137,7 @@ function LaboratoryView() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-6 rounded-3xl shadow-xl shadow-blue-100 text-white">
+          <div className="neu-btn-primary p-6 text-white">
             <Beaker size={32} className="mb-4 opacity-50" />
             <h4 className="text-lg font-black mb-2">Lab Compliance</h4>
             <p className="text-xs font-bold text-white/70 leading-relaxed mb-4">

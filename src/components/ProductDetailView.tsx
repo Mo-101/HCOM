@@ -45,7 +45,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
       </div>
 
       {/* Product Detail Card */}
-      <div className="bg-white rounded-[20px] border border-gray-100 shadow-[8px_8px_16px_#e6e9ef,-8px_-8px_16px_#ffffff] p-6 md:p-8">
+      <div className="neu-flat p-6 md:p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Left: Product Image */}
@@ -62,7 +62,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
               {[product.image, "https://picsum.photos/seed/med1/320/240", "https://picsum.photos/seed/med2/320/240"].map((img, idx) => (
                 <button 
                   key={idx}
-                  className={`w-16 h-16 rounded-xl overflow-hidden bg-white border-2 transition-all ${mainImage === img ? 'border-blue-500 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                  className={`neu-btn w-16 h-16 overflow-hidden ${mainImage === img ? 'border-blue-500' : 'opacity-60'}`}
                   onClick={() => setMainImage(img)}
                 >
                   <img src={img} className="w-full h-full object-contain p-2" referrerPolicy="no-referrer" />
@@ -108,7 +108,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
                 {['USD', 'EUR', 'GBP'].map(curr => (
                   <button 
                     key={curr}
-                    className={`px-3 py-1.5 rounded-full text-sm font-bold transition-all ${currency === curr ? 'bg-blue-600 text-white shadow-lg' : 'bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100'}`}
+                    className={`neu-btn px-3 py-1.5 ${currency === curr ? 'neu-btn-primary' : ''}`}
                     onClick={() => setCurrency(curr)}
                   >
                     {currencySymbols[curr]} {curr}
@@ -118,8 +118,8 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
             </div>
 
             <div className="flex items-center gap-4 pt-2">
-              <div className="bg-slate-50 p-2 rounded-xl flex items-center gap-2 border border-slate-100">
-                <button onClick={() => adjustQty(-1)} className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-600 hover:text-blue-600 transition-all">
+              <div className="neu-pressed p-2 flex items-center gap-2">
+                <button onClick={() => adjustQty(-1)} className="neu-btn w-10 h-10 flex items-center justify-center text-slate-600 hover:text-blue-600">
                   <Minus size={16} />
                 </button>
                 <input 
@@ -128,20 +128,20 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
                   onChange={(e) => setCurrentQty(Math.max(1, Math.min(99, parseInt(e.target.value) || 1)))}
                   className="w-14 text-center font-bold bg-transparent border-none outline-none text-slate-800 text-lg"
                 />
-                <button onClick={() => adjustQty(1)} className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-600 hover:text-blue-600 transition-all">
+                <button onClick={() => adjustQty(1)} className="neu-btn w-10 h-10 flex items-center justify-center text-slate-600 hover:text-blue-600">
                   <Plus size={16} />
                 </button>
               </div>
               
               <button 
                 onClick={() => onAddToCart(product, currentQty)}
-                className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+                className="neu-btn-primary flex-1 py-3 px-6 flex items-center justify-center gap-2"
               >
                 <ShoppingCart size={20} />
                 Add to Order
               </button>
               
-              <button className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all">
+              <button className="neu-circle w-12 h-12 flex items-center justify-center text-slate-400 hover:text-red-500">
                 <Heart size={20} />
               </button>
             </div>
@@ -153,7 +153,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
                 { icon: RefreshCcw, label: '30-Day Return', color: 'text-purple-600' },
                 { icon: Headphones, label: '24/7 Support', color: 'text-orange-600' }
               ].map((item, idx) => (
-                <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div key={idx} className="neu-flat p-3">
                   <item.icon size={20} className={`${item.color} mx-auto mb-1`} />
                   <div className="text-[10px] font-bold text-slate-700 uppercase">{item.label}</div>
                 </div>
@@ -164,7 +164,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
 
         {/* Tabs Section */}
         <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="flex gap-1 mb-6 bg-gray-50 p-2 rounded-xl w-fit">
+          <div className="neu-pressed p-2 flex gap-1 mb-6 w-fit">
             {[
               { id: 'specs', label: 'Specifications' },
               { id: 'contents', label: 'Contents' },
@@ -173,7 +173,7 @@ const ProductDetailView: React.FC<ProductDetailViewProps> = ({ product, onBack, 
             ].map(tab => (
               <button 
                 key={tab.id}
-                className={`px-6 py-2 text-sm font-semibold rounded-lg transition-all ${activeTab === tab.id ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                className={`neu-btn px-6 py-2 text-sm font-semibold ${activeTab === tab.id ? 'neu-btn-primary' : ''}`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 {tab.label}

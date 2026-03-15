@@ -80,7 +80,7 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
             <select 
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="bg-white px-4 py-2 text-sm font-semibold text-gray-700 rounded-xl border border-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="neu-input text-sm font-semibold text-gray-700 focus:outline-none"
             >
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
@@ -99,7 +99,7 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
           <button 
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`px-5 py-2 text-sm font-bold rounded-full transition-all ${activeCategory === cat.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-white text-gray-600 shadow-sm border border-gray-100 hover:bg-gray-50'}`}
+            className={`px-5 py-2 text-sm font-bold rounded-full transition-all ${activeCategory === cat.id ? 'neu-btn-primary' : 'neu-btn text-gray-600'}`}
           >
             {cat.label}
           </button>
@@ -107,8 +107,8 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="bg-gray-50 flex items-center gap-3 px-4 py-3 rounded-xl flex-1 w-full md:w-auto border border-gray-100">
+      <div className="neu-flat p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="neu-pressed flex items-center gap-3 px-4 py-3 flex-1 w-full md:w-auto">
           <Search className="text-gray-400" size={20} />
           <input 
             type="text" 
@@ -120,19 +120,19 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
         </div>
         
         <div className="flex gap-3 w-full md:w-auto">
-          <button className="px-5 py-3 bg-white border border-gray-100 rounded-xl text-sm font-bold text-gray-600 flex items-center gap-2 hover:bg-gray-50 transition-all">
+          <button className="neu-btn flex items-center gap-2">
             <Filter size={18} />
             Filters
           </button>
-          <button className="px-5 py-3 bg-white border border-gray-100 rounded-xl text-sm font-bold text-gray-600 flex items-center gap-2 hover:bg-gray-50 transition-all">
+          <button className="neu-btn flex items-center gap-2">
             <ArrowUpDown size={18} />
             Sort
           </button>
           <div className="flex gap-2">
-            <button className="p-3 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-100">
+            <button className="neu-circle bg-blue-600 text-white w-11 h-11">
               <Grid3X3 size={18} />
             </button>
-            <button className="p-3 bg-white border border-gray-100 text-gray-600 rounded-xl hover:bg-gray-50 transition-all">
+            <button className="neu-circle w-11 h-11 text-gray-600">
               <List size={18} />
             </button>
           </div>
@@ -150,7 +150,7 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               whileHover={{ y: -8 }}
-              className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[24px] overflow-hidden shadow-sm hover:shadow-xl hover:bg-white transition-all group relative cursor-pointer"
+              className="neu-flat overflow-hidden group relative cursor-pointer"
               onClick={() => setSelectedProduct(product)}
             >
               <div className="absolute top-4 right-4 z-10 flex items-center gap-2 px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full border border-white/60 shadow-sm text-[11px] font-bold">
@@ -197,7 +197,7 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
                       e.stopPropagation();
                       onAddToCart(product, 1);
                     }}
-                    className="flex-1 h-11 bg-blue-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-100 hover:shadow-blue-200 transition-all hover:-translate-y-0.5"
+                    className="flex-1 neu-btn-primary flex items-center justify-center gap-2"
                   >
                     <ShoppingCart size={16} />
                     Quick Order
@@ -206,7 +206,7 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    className="w-11 h-11 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                    className="neu-circle w-11 h-11 text-gray-400 hover:text-red-500"
                   >
                     <Heart size={18} />
                   </button>
@@ -218,16 +218,16 @@ function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setAct
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-center gap-2 pt-8">
-        <button className="p-2 rounded-xl bg-white border border-gray-100 text-gray-400 cursor-not-allowed">
+      <div className="flex items-center justify-center gap-4 pt-8">
+        <button className="neu-circle w-10 h-10 text-gray-400 cursor-not-allowed">
           <ChevronLeft size={20} />
         </button>
-        <button className="w-10 h-10 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-100">1</button>
-        <button className="w-10 h-10 rounded-xl bg-white border border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-all">2</button>
-        <button className="w-10 h-10 rounded-xl bg-white border border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-all">3</button>
+        <button className="neu-btn-primary w-10 h-10 !px-0 flex items-center justify-center">1</button>
+        <button className="neu-btn text-gray-600 w-10 h-10 !px-0 flex items-center justify-center">2</button>
+        <button className="neu-btn text-gray-600 w-10 h-10 !px-0 flex items-center justify-center">3</button>
         <span className="text-gray-400 px-2">...</span>
-        <button className="w-10 h-10 rounded-xl bg-white border border-gray-100 text-gray-600 font-bold hover:bg-gray-50 transition-all">8</button>
-        <button className="p-2 rounded-xl bg-white border border-gray-100 text-gray-600 hover:bg-gray-50 transition-all">
+        <button className="neu-btn text-gray-600 w-10 h-10 !px-0 flex items-center justify-center">8</button>
+        <button className="neu-circle w-10 h-10 text-gray-600">
           <ChevronRight size={20} />
         </button>
       </div>

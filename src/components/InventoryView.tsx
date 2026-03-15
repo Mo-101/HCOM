@@ -48,7 +48,7 @@ function InventoryView() {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6"
     >
-      <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+      <div className="neu-flat p-6 flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-black text-gray-800">Global Inventory</h2>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Consolidated Stock Levels Across All Hubs</p>
@@ -56,7 +56,7 @@ function InventoryView() {
         <div className="flex gap-3">
           <button 
             onClick={fetchAllInventory}
-            className="p-2 bg-gray-50 border border-gray-100 rounded-xl hover:bg-gray-100 transition-colors"
+            className="neu-btn p-2"
             title="Refresh Data"
           >
             <RefreshCw size={18} className={`text-gray-600 ${isLoading ? 'animate-spin' : ''}`} />
@@ -68,14 +68,14 @@ function InventoryView() {
               placeholder="Search inventory..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-bold"
+              className="neu-input pl-10 pr-4 py-2"
             />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+        <div className="neu-flat p-6">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-blue-50 rounded-2xl text-blue-600">
               <Boxes size={24} />
@@ -91,7 +91,7 @@ function InventoryView() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+        <div className="neu-flat p-6">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-orange-50 rounded-2xl text-orange-600">
               <AlertTriangle size={24} />
@@ -105,7 +105,7 @@ function InventoryView() {
           <div className="text-3xl font-black text-gray-800">{lowStockCount}</div>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+        <div className="neu-flat p-6">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
               <Package size={24} />
@@ -120,7 +120,7 @@ function InventoryView() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+      <div className="neu-flat overflow-hidden">
         <div className="p-6 border-b border-gray-50 bg-gray-50/30">
           <h3 className="text-lg font-black text-gray-800">Inventory Master List</h3>
         </div>

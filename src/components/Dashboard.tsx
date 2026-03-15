@@ -24,7 +24,7 @@ const KpiCard = ({ label, value, trend, trendUp, data, color }: {
   data: { value: number }[],
   color: string
 }) => (
-  <div className="bg-white p-5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 transition-transform hover:scale-[1.02] duration-300">
+  <div className="neu-flat p-5 transition-transform hover:scale-[1.02] duration-300">
     <div className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1">{label}</div>
     <div className="flex items-end justify-between mb-2">
       <div className="text-2xl font-black">{value}</div>
@@ -138,7 +138,7 @@ function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Bar Chart */}
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 lg:col-span-2">
+        <div className="neu-flat p-6 lg:col-span-2">
           <div className="flex justify-between items-center mb-8">
             <div>
               <h3 className="text-lg font-black text-gray-800">Hourly Throughput</h3>
@@ -212,7 +212,7 @@ function Dashboard() {
         </div>
 
         {/* Donut Chart */}
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+        <div className="neu-flat p-6">
           <div className="mb-8">
             <h3 className="text-lg font-black text-gray-800">Regional Output</h3>
             <p className="text-xs text-gray-400 font-bold">Live allocation distribution</p>
@@ -266,7 +266,7 @@ function Dashboard() {
       </div>
 
       {/* Table Section */}
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+      <div className="neu-flat overflow-hidden">
         <div className="p-6 border-b border-gray-50 flex justify-between items-center">
           <div>
             <h3 className="text-lg font-black text-gray-800">Live Work Orders</h3>
@@ -305,7 +305,7 @@ function Dashboard() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className={`p-2 rounded-xl transition-colors ${row.active ? 'bg-white/20 hover:bg-white/30' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                    <button className={`p-2 rounded-xl transition-colors ${row.active ? 'bg-white/20 hover:bg-white/30' : 'neu-circle w-8 h-8'}`}>
                       <ChevronRight size={16} />
                     </button>
                   </td>
