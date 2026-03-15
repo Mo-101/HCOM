@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { 
   Header, 
+  Sidebar,
   Dashboard, 
   CatalogView, 
   OrdersView, 
@@ -168,52 +169,56 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb]">
+    <div className="min-h-screen bg-[#f5f7fb] flex">
       <Toaster position="top-right" />
       
-      <Header 
-        currentUser={currentUser}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onLogout={handleLogout}
-        onProfileSettings={handleProfileSettings}
-        onOrderClick={handleOrderClick}
-      />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="max-w-7xl mx-auto p-6">
-        {activeTab === 'dashboard' && <Dashboard />}
-        {activeTab === 'catalog' && (
-          <CatalogView 
-            products={PRODUCTS} 
-            onAddToCart={addToCart} 
-            onCheckout={handleCheckout} 
-          />
-        )}
-        {activeTab === 'orders' && (
-          <OrdersView 
-            orders={orders} 
-            onUpdateStatus={updateOrderStatus}
-            selectedOrderId={selectedOrderId}
-            setSelectedOrderId={setSelectedOrderId}
-          />
-        )}
-        {activeTab === 'osl-operations' && (
-          <OSLOperations 
-            orders={orders} 
-            onUpdateStatus={updateOrderStatus} 
-          />
-        )}
-        {activeTab === 'admin' && <AdminView />}
-        
-        {/* Placeholder for other views */}
-        {['drafts', 'review', 'inventory'].includes(activeTab) && (
-          <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-400 italic">
-              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View Implementation in Progress...
-            </h2>
-          </div>
-        )}
-      </main>
+      <div className="main-with-sidebar flex-1">
+        <Header 
+          currentUser={currentUser}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onLogout={handleLogout}
+          onProfileSettings={handleProfileSettings}
+          onOrderClick={handleOrderClick}
+        />
+
+        <div className="mt-8">
+          {activeTab === 'dashboard' && <Dashboard />}
+          {activeTab === 'catalog' && (
+            <CatalogView 
+              products={PRODUCTS} 
+              onAddToCart={addToCart} 
+              onCheckout={handleCheckout} 
+            />
+          )}
+          {activeTab === 'orders' && (
+            <OrdersView 
+              orders={orders} 
+              onUpdateStatus={updateOrderStatus}
+              selectedOrderId={selectedOrderId}
+              setSelectedOrderId={setSelectedOrderId}
+            />
+          )}
+          {activeTab === 'osl-operations' && (
+            <OSLOperations 
+              orders={orders} 
+              onUpdateStatus={updateOrderStatus} 
+            />
+          )}
+          {activeTab === 'admin' && <AdminView />}
+          
+          {/* Placeholder for other views */}
+          {['statistic', 'offer', 'drafts', 'review', 'inventory'].includes(activeTab) && (
+            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+              <h2 className="text-2xl font-bold text-gray-400 italic">
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View Implementation in Progress...
+              </h2>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

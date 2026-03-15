@@ -1,6 +1,5 @@
 import React from 'react';
-import { getNavItems } from '../constants';
-import NotificationBell from './NotificationBell';
+import { Search, Bell } from 'lucide-react';
 import '../styles/Header.css';
 
 interface HeaderProps {
@@ -17,54 +16,39 @@ interface HeaderProps {
 }
 
 function Header({ currentUser, activeTab, setActiveTab, onLogout, onProfileSettings, onOrderClick }: HeaderProps) {
-  const navItems = getNavItems(currentUser.role);
+  const getTitle = (tab: string) => {
+    switch(tab) {
+      case 'dashboard': return 'Dashboard';
+      case 'orders': return 'Order';
+      case 'statistic': return 'Statistic';
+      case 'catalog': return 'Product';
+      case 'osl-operations': return 'Stock';
+      case 'admin': return 'Offer';
+      default: return tab.charAt(0).toUpperCase() + tab.slice(1);
+    }
+  };
 
   return (
-    <header className="header">
-      {/* Top Bar */}
-      <div className="header-container">
-        {/* Logo & Title */}
-        <div className="header-brand">
-          <div className="header-logo">WHO</div>
-          <div>
-            <h1 className="header-title">Health Commodity Order Management</h1>
-            <p className="header-subtitle">HCOMS Portal</p>
-          </div>
-        </div>
-
-        {/* User Info */}
-        <div className="header-user">
-          <div className="header-user-info">
-            <div className="header-user-name">
-              {currentUser.name}
-              {currentUser.country && <span className="header-user-country">, {currentUser.country}</span>}
-            </div>
-            <div className="header-user-role">{currentUser.role}</div>
-          </div>
-          <NotificationBell onOrderClick={onOrderClick} />
-          <button onClick={onProfileSettings} className="header-profile-btn" title="Profile Settings">
-            ⚙️
-          </button>
-          <button onClick={onLogout} className="header-logout-btn">
-            Logout
-          </button>
-        </div>
+    <header className="app-header">
+      <div className="header-left">
+        <h1 className="page-title">{getTitle(activeTab)}</h1>
+        <p className="page-subtitle">28 orders found</p>
       </div>
 
-      {/* Navigation */}
-      <nav className="header-nav">
-        <div className="header-nav-container">
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`header-nav-btn ${activeTab === item.id ? 'active' : ''}`}
-            >
-              {item.label}
-            </button>
-          ))}
+      <div className="header-right">
+        <button className="header-icon-btn">
+          <Bell size={20} />
+          <span className="notification-dot"></span>
+        </button>
+        <button className="header-icon-btn">
+          <Search size={20} />
+        </button>
+        <div className="user-profile" onClick={onProfileSettings}>
+          <div className="profile-avatar">
+            {currentUser.name.split(' ').map(n => n[0]).join('')}
+          </div>
         </div>
-      </nav>
+      </div>
     </header>
   );
 }
