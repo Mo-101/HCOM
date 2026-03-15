@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
     { id: 'orders', label: 'Order', icon: ShoppingCart },
     { id: 'statistic', label: 'Statistic', icon: PieChart },
     { id: 'catalog', label: 'Product', icon: Package },
-    { id: 'osl-operations', label: 'Stock', icon: Layers },
+    { id: 'inventory', label: 'Stock', icon: Layers },
     { id: 'admin', label: 'Offer', icon: Tag },
   ];
 

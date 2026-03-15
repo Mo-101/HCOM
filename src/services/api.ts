@@ -94,8 +94,22 @@ export const warehouseAPI = {
       success: true,
       data: {
         warehouses: [
-          { id: 1, code: 'WH-01', name: 'Main Warehouse' },
-          { id: 2, code: 'WH-02', name: 'Regional Hub' },
+          { id: 1, code: 'WH-01', name: 'Main Warehouse', location: 'Dubai, UAE', capacity_used: 65, staff_count: 24 },
+          { id: 2, code: 'WH-02', name: 'Regional Hub', location: 'Accra, Ghana', capacity_used: 42, staff_count: 12 },
+        ]
+      }
+    };
+  },
+  getInventory: async (id: number) => {
+    await mockDelay(400);
+    return {
+      success: true,
+      data: {
+        inventory: [
+          { sku: 'KIT-001', product_name: 'IEHK 2017 Basic Unit', quantity: 45, unit: 'kit', reorder_point: 50 },
+          { sku: 'KIT-002', product_name: 'IEHK 2017 Supplementary', quantity: 12, unit: 'kit', reorder_point: 10 },
+          { sku: 'PPE-001', product_name: 'N95 Respirator Mask', quantity: 2500, unit: 'box', reorder_point: 1000 },
+          { sku: 'PPE-002', product_name: 'Nitrile Gloves', quantity: 800, unit: 'box', reorder_point: 1000 },
         ]
       }
     };

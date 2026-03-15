@@ -12,7 +12,8 @@ import {
   CatalogView, 
   OrdersView, 
   OSLOperations, 
-  AdminView 
+  AdminView,
+  WarehouseManagement
 } from './components';
 import { COMMODITIES, INITIAL_ORDERS } from './constants';
 
@@ -207,10 +208,11 @@ export default function App() {
               onUpdateStatus={updateOrderStatus} 
             />
           )}
+          {activeTab === 'inventory' && <WarehouseManagement />}
           {activeTab === 'admin' && <AdminView />}
           
           {/* Placeholder for other views */}
-          {['statistic', 'offer', 'drafts', 'review', 'inventory'].includes(activeTab) && (
+          {['statistic', 'offer', 'drafts', 'review'].includes(activeTab) && (
             <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
               <h2 className="text-2xl font-bold text-gray-400 italic">
                 {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View Implementation in Progress...
