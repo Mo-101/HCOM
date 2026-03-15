@@ -26,10 +26,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <div className="sidebar">
-      <div className="sidebar-logo">
-        <span>eProduct</span>
-      </div>
-      
       <nav className="sidebar-nav">
         {menuItems.map((item) => {
           const Icon = item.icon;
