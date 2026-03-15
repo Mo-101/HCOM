@@ -175,7 +175,9 @@ export default function App() {
     country: 'Switzerland'
   });
   
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTopTab, setActiveTopTab] = useState('dashboard');
+  const [activeSubTab, setActiveSubTab] = useState('overview');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [cart, setCart] = useState<{ product: Product, qty: number }[]>([]);
   const [orders, setOrders] = useState<Order[]>(MAPPED_ORDERS);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -213,7 +215,8 @@ export default function App() {
     };
     setOrders([newOrder, ...orders]);
     setCart([]);
-    setActiveTab('orders');
+    setActiveTopTab('supply-chain');
+    setActiveSubTab('orders');
     setSelectedOrderId(newOrder.id);
   };
 
@@ -230,7 +233,8 @@ export default function App() {
   };
 
   const handleOrderClick = (orderId: string) => {
-    setActiveTab('orders');
+    setActiveTopTab('supply-chain');
+    setActiveSubTab('orders');
     setSelectedOrderId(orderId);
   };
 
@@ -240,50 +244,98 @@ export default function App() {
       
       <Header 
         currentUser={currentUser}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        activeTab={activeTopTab}
+        setActiveTab={(tab) => {
+          setActiveTopTab(tab);
+          // Set default subtab
+          if (tab === 'dashboard') setActiveSubTab('overview');
+          if (tab === 'products') setActiveSubTab('catalog');
+          if (tab === 'supply-chain') setActiveSubTab('orders');
+          if (tab === 'laboratory') setActiveSubTab('lab-dashboard');
+          if (tab === 'admin') setActiveSubTab('admin-dashboard');
+        }}
         onLogout={handleLogout}
         onProfileSettings={handleProfileSettings}
         onOrderClick={handleOrderClick}
       />
 
       <div className="flex flex-1">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar 
+          activeTopTab={activeTopTab}
+          activeSubTab={activeSubTab} 
+          setActiveSubTab={setActiveSubTab}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
 
         <main className="main-with-sidebar">
-          {activeTab === 'dashboard' && <Dashboard />}
-          {activeTab === 'catalog' && (
-            <CatalogView 
-              products={PRODUCTS} 
-              onAddToCart={addToCart} 
-              onCheckout={handleCheckout} 
-            />
+          {activeTopTab === 'dashboard' && (
+            <>
+              {activeSubTab === 'overview' && <Dashboard />}
+              {activeSubTab === 'analytics' && (
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Analytics View Implementation in Progress...</h2>
+                </div>
+              )}
+            </>
           )}
-          {activeTab === 'orders' && (
-            <OrdersView 
-              orders={orders} 
-              onUpdateStatus={updateOrderStatus}
-              selectedOrderId={selectedOrderId}
-              setSelectedOrderId={setSelectedOrderId}
-            />
+
+          {activeTopTab === 'products' && (
+            <>
+              {activeSubTab === 'catalog' && (
+                <CatalogView 
+                  products={PRODUCTS} 
+                  onAddToCart={addToCart} 
+                  onCheckout={handleCheckout}
+                  activeCategory={selectedCategory}
+                  setActiveCategory={setSelectedCategory}
+                />
+              )}
+              {activeSubTab === 'categories' && (
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Categories View Implementation in Progress...</h2>
+                </div>
+              )}
+            </>
           )}
-          {activeTab === 'osl-operations' && (
-            <OSLOperations 
-              orders={orders} 
-              onUpdateStatus={updateOrderStatus} 
-            />
+
+          {activeTopTab === 'supply-chain' && (
+            <>
+              {activeSubTab === 'orders' && (
+                <OrdersView 
+                  orders={orders} 
+                  onUpdateStatus={updateOrderStatus}
+                  selectedOrderId={selectedOrderId}
+                  setSelectedOrderId={setSelectedOrderId}
+                />
+              )}
+              {activeSubTab === 'drafts' && (
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Draft Orders View Implementation in Progress...</h2>
+                </div>
+              )}
+              {activeSubTab === 'osl-operations' && (
+                <OSLOperations 
+                  orders={orders} 
+                  onUpdateStatus={updateOrderStatus} 
+                />
+              )}
+              {activeSubTab === 'inventory' && (
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Inventory View Implementation in Progress...</h2>
+                </div>
+              )}
+              {activeSubTab === 'warehouse' && <WarehouseManagement />}
+            </>
           )}
-          {activeTab === 'inventory' && <WarehouseManagement />}
-          {activeTab === 'admin' && <AdminView />}
-          
-          {/* Placeholder for other views */}
-          {['statistic', 'offer', 'drafts', 'review'].includes(activeTab) && (
+
+          {activeTopTab === 'laboratory' && (
             <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
-              <h2 className="text-2xl font-bold text-gray-400 italic">
-                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View Implementation in Progress...
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-400 italic">Laboratory View Implementation in Progress...</h2>
             </div>
           )}
+
+          {activeTopTab === 'admin' && <AdminView />}
         </main>
       </div>
     </div>

@@ -12,12 +12,13 @@ interface CatalogViewProps {
   products: Product[];
   onAddToCart: (product: Product, qty: number) => void;
   onCheckout: () => void;
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
 }
 
-function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
+function CatalogView({ products, onAddToCart, onCheckout, activeCategory, setActiveCategory }: CatalogViewProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
   const [currency, setCurrency] = useState('USD');
 
   const exchangeRates: Record<string, number> = {

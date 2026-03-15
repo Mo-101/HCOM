@@ -114,43 +114,55 @@ export const INITIAL_ORDERS = [
   },
 ];
 
+export const TOP_NAV_ITEMS = [
+  { id: 'dashboard', label: 'Dashboard' },
+  { id: 'products', label: 'Products' },
+  { id: 'supply-chain', label: 'Supply Chain' },
+  { id: 'laboratory', label: 'Laboratory' },
+  { id: 'admin', label: 'Admin' },
+];
+
+export const SIDEBAR_NAV_ITEMS: Record<string, { id: string, label: string, icon?: string }[]> = {
+  'dashboard': [
+    { id: 'overview', label: 'Overview' },
+    { id: 'analytics', label: 'Analytics' },
+  ],
+  'products': [
+    { id: 'catalog', label: 'Catalog' },
+    { id: 'categories', label: 'Categories' },
+  ],
+  'supply-chain': [
+    { id: 'orders', label: 'Orders' },
+    { id: 'drafts', label: 'Draft Orders' },
+    { id: 'osl-operations', label: 'OSL Operations' },
+    { id: 'inventory', label: 'Inventory' },
+    { id: 'warehouse', label: 'Warehouse' },
+  ],
+  'laboratory': [
+    { id: 'lab-dashboard', label: 'Lab Dashboard' },
+    { id: 'controls', label: 'Controls' },
+  ],
+  'admin': [
+    { id: 'admin-dashboard', label: 'Admin Dashboard' },
+    { id: 'users', label: 'User Management' },
+    { id: 'settings', label: 'Settings' },
+  ],
+};
+
 export const getNavItems = (role: string) => {
+  // This function is now used for Top Nav
   const baseItems = [
     { id: 'dashboard', label: 'Dashboard' },
-    { id: 'orders', label: 'Orders' },
+    { id: 'products', label: 'Products' },
+    { id: 'supply-chain', label: 'Supply Chain' },
   ];
 
-  if (role === 'Country Office') {
-    return [
-      ...baseItems,
-      { id: 'catalog', label: 'Catalog' },
-      { id: 'drafts', label: 'Drafts' },
-    ];
-  }
-
-  if (role === 'Laboratory Team') {
-    return [
-      ...baseItems,
-      { id: 'review', label: 'Lab Review' },
-    ];
-  }
-
-  if (role === 'OSL Team') {
-    return [
-      ...baseItems,
-      { id: 'osl-operations', label: 'OSL Operations' },
-      { id: 'inventory', label: 'Inventory' },
-    ];
+  if (role === 'Laboratory Team' || role === 'Super Admin') {
+    baseItems.push({ id: 'laboratory', label: 'Laboratory' });
   }
 
   if (role === 'Super Admin') {
-    return [
-      ...baseItems,
-      { id: 'catalog', label: 'Catalog' },
-      { id: 'inventory', label: 'Inventory' },
-      { id: 'osl-operations', label: 'OSL Operations' },
-      { id: 'admin', label: 'Admin' },
-    ];
+    baseItems.push({ id: 'admin', label: 'Admin' });
   }
 
   return baseItems;
