@@ -1,0 +1,124 @@
+.header {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-logo {
+  background: #1d4ed8;
+  color: white;
+  font-weight: 900;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.header-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-user-info {
+  text-align: right;
+}
+
+.header-user-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.header-user-country {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.header-user-role {
+  font-size: 0.75rem;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.header-nav {
+  background: #f9fafb;
+  border-top: 1px solid #f3f4f6;
+}
+
+.header-nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.header-nav-btn {
+  padding: 0.75rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.header-nav-btn:hover {
+  color: #111827;
+}
+
+.header-nav-btn.active {
+  color: #1d4ed8;
+  border-bottom-color: #1d4ed8;
+}
+
+.header-logout-btn {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ef4444;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.header-logout-btn:hover {
+  background: #fee2e2;
+}
+
+.header-profile-btn {
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.header-profile-btn:hover {
+  transform: rotate(45deg);
+}
