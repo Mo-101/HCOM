@@ -4,6 +4,7 @@ import { adminAPI, countriesAPI, warehouseAPI } from '../services/api';
 import { formatDateTime } from '../utils/helpers';
 import WarehouseManagement from './WarehouseManagement';
 import ClearOrdersModal from './modals/ClearOrdersModal';
+import ConfirmModal from './modals/ConfirmModal';
 import Loading from './Loading';
 import '../styles/AdminView.css';
 
@@ -31,6 +32,8 @@ function AdminView() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showClearOrdersModal, setShowClearOrdersModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmConfig, setConfirmConfig] = useState({ title: '', message: '', onConfirm: () => {}, variant: 'primary' as any });
   const [clearOrdersMode, setClearOrdersMode] = useState<'country' | 'all'>('country');
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [deletePassword, setDeletePassword] = useState('');
@@ -207,40 +210,48 @@ function AdminView() {
 
   // Handle reset password
   const handleResetPassword = async (userId: any) => {
-    if (!window.confirm('Reset password for this user? They will receive an email with a temporary password.')) {
-      return;
-    }
-
-    try {
-      const response = await adminAPI.resetPassword(userId);
-      if (response.success) {
-        toast.success(`Password reset! New temp password: ${response.data.tempPassword}`, { duration: 10000 });
-        fetchUsers();
-      }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to reset password');
-    }
+    setConfirmConfig({
+      title: 'Reset Password',
+      message: 'Reset password for this user? They will receive an email with a temporary password.',
+      onConfirm: async () => {
+        try {
+          const response = await adminAPI.resetPassword(userId);
+          if (response.success) {
+            toast.success(`Password reset! New temp password: ${response.data.tempPassword}`, { duration: 10000 });
+            fetchUsers();
+          }
+        } catch (err: any) {
+          toast.error(err.message || 'Failed to reset password');
+        }
+      },
+      variant: 'warning'
+    });
+    setShowConfirmModal(true);
   };
 
   // Handle toggle user status
   const handleToggleStatus = async (user: any) => {
     const action = user.is_active ? 'deactivate' : 'activate';
-    if (!window.confirm(`${action.charAt(0).toUpperCase() + action.slice(1)} this user?`)) {
-      return;
-    }
-
-    try {
-      if (user.is_active) {
-        await adminAPI.deactivateUser(user.id);
-      } else {
-        await adminAPI.activateUser(user.id);
-      }
-      toast.success(`User ${action}d successfully`);
-      fetchUsers();
-      fetchStats();
-    } catch (err: any) {
-      toast.error(err.message || `Failed to ${action} user`);
-    }
+    setConfirmConfig({
+      title: `${action.charAt(0).toUpperCase() + action.slice(1)} User`,
+      message: `Are you sure you want to ${action} this user?`,
+      onConfirm: async () => {
+        try {
+          if (user.is_active) {
+            await adminAPI.deactivateUser(user.id);
+          } else {
+            await adminAPI.activateUser(user.id);
+          }
+          toast.success(`User ${action}d successfully`);
+          fetchUsers();
+          fetchStats();
+        } catch (err: any) {
+          toast.error(err.message || `Failed to ${action} user`);
+        }
+      },
+      variant: action === 'deactivate' ? 'danger' : 'primary'
+    });
+    setShowConfirmModal(true);
   };
 
   // Handle delete user
@@ -273,30 +284,34 @@ function AdminView() {
   const handleQuickRoleChange = async (userId: any, currentRole: string, newRole: string) => {
     if (currentRole === newRole) return;
 
-    if (!window.confirm(`Change user role from "${currentRole}" to "${newRole}"? This will take effect immediately.`)) {
-      return;
-    }
+    setConfirmConfig({
+      title: 'Change User Role',
+      message: `Change user role from "${currentRole}" to "${newRole}"? This will take effect immediately.`,
+      onConfirm: async () => {
+        try {
+          const userData: any = { role: newRole };
 
-    try {
-      const userData: any = { role: newRole };
+          if (newRole === 'OSL Team') {
+            userData.oslAdminLevel = 0;
+          }
 
-      if (newRole === 'OSL Team') {
-        userData.oslAdminLevel = 0;
-      }
+          if (currentRole === 'Country Office' && newRole !== 'Country Office') {
+            userData.country = null;
+          }
 
-      if (currentRole === 'Country Office' && newRole !== 'Country Office') {
-        userData.country = null;
-      }
-
-      const response = await adminAPI.updateUser(userId, userData);
-      if (response.success) {
-        toast.success('User role updated successfully');
-        fetchUsers();
-        fetchStats();
-      }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to update user role');
-    }
+          const response = await adminAPI.updateUser(userId, userData);
+          if (response.success) {
+            toast.success('User role updated successfully');
+            fetchUsers();
+            fetchStats();
+          }
+        } catch (err: any) {
+          toast.error(err.message || 'Failed to update user role');
+        }
+      },
+      variant: 'primary'
+    });
+    setShowConfirmModal(true);
   };
 
   return (
@@ -653,6 +668,17 @@ function AdminView() {
           onSuccess={() => {
             toast.success('Order history cleared successfully');
           }}
+        />
+      )}
+
+      {showConfirmModal && (
+        <ConfirmModal 
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={confirmConfig.onConfirm}
+          title={confirmConfig.title}
+          message={confirmConfig.message}
+          confirmVariant={confirmConfig.variant}
         />
       )}
     </div>

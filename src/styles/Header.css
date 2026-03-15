@@ -2,6 +2,9 @@
   background: linear-gradient(135deg, #1A2B4A 0%, #009ADE 100%);
   color: white;
   padding: 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 50;
 }
 
 .header-container {
@@ -133,7 +136,8 @@
   background: #f5f7fb;
   color: #009ADE;
   font-weight: 700;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.05), 
+              inset -4px -4px 8px rgba(255, 255, 255, 0.5);
 }
 
 /* Responsive */
