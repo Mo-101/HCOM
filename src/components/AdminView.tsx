@@ -6,7 +6,7 @@ import WarehouseManagement from './WarehouseManagement';
 import ClearOrdersModal from './modals/ClearOrdersModal';
 import ConfirmModal from './modals/ConfirmModal';
 import Loading from './Loading';
-import '../styles/AdminView.css';
+// import '../styles/AdminView.css';
 
 // OSL Admin Level labels
 const OSL_LEVELS = [
