@@ -11,9 +11,6 @@ export { default as CatalogView } from './CatalogView';
 export { default as OrdersView } from './OrdersView';
 export { default as OSLOperations } from './OSLOperations';
 export { default as AdminView } from './AdminView';
-export { default as LaboratoryView } from './LaboratoryView';
-export { default as DraftsView } from './DraftsView';
-export { default as InventoryView } from './InventoryView';
 
 // Modal Components
 export { default as ClearOrdersModal } from './modals/ClearOrdersModal';

@@ -25,7 +25,7 @@ function OSLOperations({ orders, onUpdateStatus }: OSLOperationsProps) {
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="neu-flat overflow-hidden !p-0">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden !p-0">
             <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <h3 className="text-lg font-bold">Pending Operations Queue</h3>
               <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-wider">
@@ -51,7 +51,7 @@ function OSLOperations({ orders, onUpdateStatus }: OSLOperationsProps) {
                       <td className="px-6 py-4">
                         <button 
                           onClick={() => onUpdateStatus(order.id, 'approved')}
-                          className="neu-btn-primary bg-emerald-600 hover:bg-emerald-700 px-4 py-1.5"
+                          className="px-4 py-1.5 bg-emerald-600 text-white rounded-lg font-bold text-xs hover:bg-emerald-700 shadow-md"
                         >
                           Approve & Release
                         </button>
@@ -71,7 +71,7 @@ function OSLOperations({ orders, onUpdateStatus }: OSLOperationsProps) {
         </div>
 
         <div className="space-y-6">
-          <div className="neu-flat p-6 space-y-6">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
             <h3 className="text-lg font-bold">Process Timeline</h3>
             <div className="space-y-6 relative before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
               {[
@@ -88,7 +88,7 @@ function OSLOperations({ orders, onUpdateStatus }: OSLOperationsProps) {
             </div>
           </div>
           
-          <div className="neu-pressed p-5 text-blue-800 text-sm leading-relaxed">
+          <div className="p-5 bg-blue-50 rounded-2xl border border-blue-100 text-blue-800 text-sm leading-relaxed">
             <div className="flex gap-3">
               <AlertCircle size={20} className="shrink-0" />
               <p><strong>Note:</strong> Once approved, the request locks and a Material Stock Release document is generated automatically.</p>
@@ -98,7 +98,7 @@ function OSLOperations({ orders, onUpdateStatus }: OSLOperationsProps) {
       </div>
 
       {/* Stock Release Form Preview (Mock) */}
-      <div className="neu-flat overflow-hidden opacity-50 grayscale pointer-events-none">
+      <div className="bg-white border-2 border-[#d9e7fb] rounded-xl overflow-hidden shadow-xl opacity-50 grayscale pointer-events-none">
         <div className="bg-emerald-600 text-white px-4 py-2 text-xs font-black uppercase tracking-widest">Material Stock Release Preview</div>
         <div className="p-12 text-center font-black text-gray-300 uppercase tracking-widest text-4xl">
           Stock Release Document<br/>Generated Upon Approval

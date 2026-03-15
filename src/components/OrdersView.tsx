@@ -92,13 +92,13 @@ function OrdersView({ orders, onUpdateStatus, selectedOrderId, setSelectedOrderI
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="neu-flat overflow-hidden !p-0"
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden !p-0"
           >
-            <div className="p-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <h3 className="text-lg font-bold">All Orders</h3>
               <div className="flex gap-2">
                 {['All', 'Draft', 'Submitted', 'Approved'].map(tab => (
-                  <button key={tab} className={`px-4 py-1.5 rounded-full text-xs font-bold ${tab === 'All' ? 'neu-btn-primary' : 'neu-btn text-gray-600'}`}>
+                  <button key={tab} className={`px-4 py-1.5 rounded-full text-xs font-bold ${tab === 'All' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-100'}`}>
                     {tab}
                   </button>
                 ))}
@@ -132,7 +132,7 @@ function OrdersView({ orders, onUpdateStatus, selectedOrderId, setSelectedOrderI
                       <td className="px-6 py-4">
                         <button 
                           onClick={() => setSelectedOrderId(order.id)}
-                          className="neu-btn text-blue-600 text-xs"
+                          className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-lg font-bold text-xs hover:bg-blue-100"
                         >
                           Open
                         </button>
@@ -159,14 +159,14 @@ function OrdersView({ orders, onUpdateStatus, selectedOrderId, setSelectedOrderI
                 <ArrowLeft size={16} /> Back to orders
               </button>
               <div className="flex gap-3">
-                <div className="neu-pressed flex items-center gap-2 px-4 py-2 text-orange-600 font-bold text-sm">
+                <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 text-orange-600 rounded-xl border border-orange-100 font-bold text-sm">
                   <Clock size={16} />
                   Adjustment Window: {formatTime(countdown)}
                 </div>
                 {selectedOrder?.status === 'draft' && (
                   <button 
                     onClick={() => onUpdateStatus(selectedOrder.id, 'submitted')}
-                    className="neu-btn-primary"
+                    className="px-6 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-100"
                   >
                     Validate & Send
                   </button>
@@ -181,20 +181,20 @@ function OrdersView({ orders, onUpdateStatus, selectedOrderId, setSelectedOrderI
                 { label: 'OSL Review', desc: 'Operations validates request.', status: 'pending' },
                 { label: 'Stock Release', desc: 'Warehouse release generated.', status: 'pending' }
               ].map((step, i) => (
-                <div key={i} className={`neu-flat p-4 border-l-4 ${step.status === 'done' ? 'border-emerald-500' : step.status === 'active' ? 'border-blue-500' : 'border-gray-200'}`}>
+                <div key={i} className={`bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 ${step.status === 'done' ? 'border-emerald-500' : step.status === 'active' ? 'border-blue-500' : 'border-gray-200'}`}>
                   <div className="text-xs font-black uppercase tracking-wider text-gray-400 mb-1">{step.label}</div>
                   <div className="text-sm font-bold">{step.desc}</div>
                 </div>
               ))}
             </div>
 
-            <div className="neu-flat overflow-hidden">
-              <div className="grid grid-cols-3 border-b-2 border-[#e6e9ef]">
-                <div className="p-4 bg-white border-r border-[#e6e9ef] flex items-center gap-3">
+            <div className="bg-white border-2 border-[#d9e7fb] rounded-xl overflow-hidden shadow-xl">
+              <div className="grid grid-cols-3 border-b-2 border-[#d9e7fb]">
+                <div className="p-4 bg-white border-r border-[#d9e7fb] flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black">WHO</div>
                   <div className="text-[10px] font-black uppercase leading-tight">World Health<br/>Organization</div>
                 </div>
-                <div className="p-4 bg-white border-r border-[#e6e9ef] flex items-center justify-center">
+                <div className="p-4 bg-white border-r border-[#d9e7fb] flex items-center justify-center">
                   <div className="text-2xl font-black text-rose-600 uppercase tracking-widest">Emergency</div>
                 </div>
                 <div className="p-4 bg-white flex flex-col justify-center items-center">

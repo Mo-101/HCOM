@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { 
   Header, 
   Sidebar,
@@ -13,10 +13,7 @@ import {
   OrdersView, 
   OSLOperations, 
   AdminView,
-  WarehouseManagement,
-  LaboratoryView,
-  DraftsView,
-  InventoryView
+  WarehouseManagement
 } from './components';
 import { COMMODITIES, INITIAL_ORDERS } from './constants';
 import { Product, Order, OrderStatus } from './types';
@@ -225,12 +222,6 @@ export default function App() {
 
   const updateOrderStatus = (id: string, status: OrderStatus) => {
     setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
-    toast.success(`Order ${id} updated to ${status}`);
-  };
-
-  const deleteOrder = (id: string) => {
-    setOrders(prev => prev.filter(o => o.id !== id));
-    toast.success(`Order ${id} deleted`);
   };
 
   const handleLogout = () => {
@@ -319,12 +310,9 @@ export default function App() {
                 />
               )}
               {activeSubTab === 'drafts' && (
-                <DraftsView 
-                  orders={orders} 
-                  onUpdateStatus={updateOrderStatus}
-                  onDelete={deleteOrder}
-                  onEdit={(id) => setSelectedOrderId(id)}
-                />
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Draft Orders View Implementation in Progress...</h2>
+                </div>
               )}
               {activeSubTab === 'osl-operations' && (
                 <OSLOperations 
@@ -332,12 +320,20 @@ export default function App() {
                   onUpdateStatus={updateOrderStatus} 
                 />
               )}
-              {activeSubTab === 'inventory' && <InventoryView />}
+              {activeSubTab === 'inventory' && (
+                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+                  <h2 className="text-2xl font-bold text-gray-400 italic">Inventory View Implementation in Progress...</h2>
+                </div>
+              )}
               {activeSubTab === 'warehouse' && <WarehouseManagement />}
             </>
           )}
 
-          {activeTopTab === 'laboratory' && <LaboratoryView />}
+          {activeTopTab === 'laboratory' && (
+            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
+              <h2 className="text-2xl font-bold text-gray-400 italic">Laboratory View Implementation in Progress...</h2>
+            </div>
+          )}
 
           {activeTopTab === 'admin' && <AdminView />}
         </main>
