@@ -1,270 +1,202 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Clock } from 'lucide-react';
-
-interface Order {
-  id: string;
-  ref: string;
-  name: string;
-  address: string;
-  date: string;
-  value: number;
-  status: string;
-  initiator: string;
-  shipmentMode: string;
-  pteao: string;
-  consignee: string;
-  notify: string;
-  readyDate: string;
-  weight: number;
-  volume: number;
-  remarks: string;
-  items: any[];
-}
+import { Search, Filter, ArrowUpDown, FileText, Clock, CheckCircle2, Truck, MoreVertical, Eye, Download, Printer, ChevronRight } from 'lucide-react';
+import { Order, OrderStatus } from '../types';
+import OrderDetailView from './OrderDetailView';
 
 interface OrdersViewProps {
   orders: Order[];
-  onUpdateStatus: (id: string, status: any) => void;
+  onUpdateStatus: (id: string, status: OrderStatus) => void;
   selectedOrderId: string | null;
   setSelectedOrderId: (id: string | null) => void;
 }
 
-const WhoFormCell = ({ label, value, type = 'default', colSpan = 1, onChange }: { 
-  label: string, 
-  value: string, 
-  type?: 'default' | 'blue' | 'yellow' | 'gray',
-  colSpan?: number,
-  onChange?: (val: string) => void
-}) => {
-  const typeClass = {
-    default: 'border border-[#d9e7fb] p-3',
-    blue: 'border border-[#d9e7fb] p-3 bg-[#eef6ff]',
-    yellow: 'border border-[#d9e7fb] p-3 bg-[#fff9e6]',
-    gray: 'border border-[#d9e7fb] p-3 bg-gray-50 text-gray-500'
-  }[type];
-
-  return (
-    <div className={`${typeClass} flex flex-col`} style={{ gridColumn: `span ${colSpan}` }}>
-      <span className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1">{label}</span>
-      {onChange ? (
-        <input 
-          type="text" 
-          value={value} 
-          onChange={(e) => onChange(e.target.value)}
-          className="bg-transparent border-none p-0 focus:ring-0 font-bold text-sm w-full"
-        />
-      ) : (
-        <span className="font-bold text-sm">{value}</span>
-      )}
-    </div>
-  );
-};
-
 function OrdersView({ orders, onUpdateStatus, selectedOrderId, setSelectedOrderId }: OrdersViewProps) {
-  const [countdown, setCountdown] = useState(3600);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('all');
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown(prev => Math.max(0, prev - 1));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const filteredOrders = useMemo(() => {
+    return orders.filter(o => {
+      const matchesSearch = o.ref.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           o.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || o.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [orders, searchQuery, statusFilter]);
 
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-    const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-    const s = (seconds % 60).toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
+  const stats = [
+    { label: 'Total Orders', value: orders.length, icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Pending', value: orders.filter(o => o.status === 'submitted').length, icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Shipped', value: orders.filter(o => o.status === 'approved').length, icon: Truck, color: 'text-purple-600', bg: 'bg-purple-50' },
+    { label: 'Delivered', value: orders.filter(o => o.status === 'completed').length, icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  ];
+
+  const getStatusStyle = (status: OrderStatus) => {
+    switch (status) {
+      case 'draft': return 'bg-gray-100 text-gray-600 border-gray-200';
+      case 'submitted': return 'bg-amber-50 text-amber-700 border-amber-100';
+      case 'approved': return 'bg-blue-50 text-blue-700 border-blue-100';
+      case 'completed': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+      default: return 'bg-gray-100 text-gray-600 border-gray-200';
+    }
   };
 
-  const selectedOrder = orders.find(o => o.id === selectedOrderId);
+  if (selectedOrderId) {
+    const selectedOrder = orders.find(o => o.id === selectedOrderId);
+    if (selectedOrder) {
+      return (
+        <OrderDetailView 
+          order={selectedOrder} 
+          onBack={() => setSelectedOrderId(null)} 
+        />
+      );
+    }
+  }
 
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-6"
+      className="space-y-8"
     >
-      <AnimatePresence mode="wait">
-        {!selectedOrderId ? (
-          <motion.div 
-            key="list"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden !p-0"
-          >
-            <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="text-lg font-bold">All Orders</h3>
-              <div className="flex gap-2">
-                {['All', 'Draft', 'Submitted', 'Approved'].map(tab => (
-                  <button key={tab} className={`px-4 py-1.5 rounded-full text-xs font-bold ${tab === 'All' ? 'bg-blue-600 text-white' : 'bg-white border border-gray-100'}`}>
-                    {tab}
-                  </button>
-                ))}
-              </div>
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <div key={i} className="bg-white shadow-[8px_8px_16px_#e6e9ef,-8px_-8px_16px_#ffffff] p-6 rounded-[24px] border border-white/20 flex items-center gap-4">
+            <div className={`${stat.bg} ${stat.color} w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm`}>
+              <stat.icon size={24} />
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50/30">
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Ref</th>
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Name</th>
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Date</th>
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Value</th>
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Status</th>
-                    <th className="px-6 py-4 text-[11px] uppercase tracking-wider text-gray-400 font-bold">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {orders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-bold">{order.ref}</td>
-                      <td className="px-6 py-4 font-bold">{order.name}</td>
-                      <td className="px-6 py-4 font-bold">{order.date}</td>
-                      <td className="px-6 py-4 font-bold">${order.value.toFixed(2)}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 font-bold text-sm">
-                          <div className={`w-2 h-2 rounded-full ${order.status === 'draft' ? 'bg-orange-400' : order.status === 'submitted' ? 'bg-blue-400' : 'bg-emerald-400'}`} />
-                          <span className="capitalize">{order.status}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button 
-                          onClick={() => setSelectedOrderId(order.id)}
-                          className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-lg font-bold text-xs hover:bg-blue-100"
-                        >
-                          Open
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div>
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">{stat.label}</div>
+              <div className="text-2xl font-black text-gray-800">{stat.value}</div>
             </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="detail"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div className="flex justify-between items-center">
-              <button 
-                onClick={() => setSelectedOrderId(null)}
-                className="flex items-center gap-2 text-sm font-bold text-blue-600 hover:underline"
-              >
-                <ArrowLeft size={16} /> Back to orders
-              </button>
-              <div className="flex gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 text-orange-600 rounded-xl border border-orange-100 font-bold text-sm">
-                  <Clock size={16} />
-                  Adjustment Window: {formatTime(countdown)}
-                </div>
-                {selectedOrder?.status === 'draft' && (
-                  <button 
-                    onClick={() => onUpdateStatus(selectedOrder.id, 'submitted')}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-100"
-                  >
-                    Validate & Send
-                  </button>
-                )}
-              </div>
-            </div>
+          </div>
+        ))}
+      </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-              {[
-                { label: 'Checkout Completed', desc: 'Items transferred from catalog.', status: 'done' },
-                { label: 'Adjustment Window', desc: '1 hour window for edits.', status: 'active' },
-                { label: 'OSL Review', desc: 'Operations validates request.', status: 'pending' },
-                { label: 'Stock Release', desc: 'Warehouse release generated.', status: 'pending' }
-              ].map((step, i) => (
-                <div key={i} className={`bg-white p-4 rounded-2xl shadow-sm border border-gray-100 border-l-4 ${step.status === 'done' ? 'border-emerald-500' : step.status === 'active' ? 'border-blue-500' : 'border-gray-200'}`}>
-                  <div className="text-xs font-black uppercase tracking-wider text-gray-400 mb-1">{step.label}</div>
-                  <div className="text-sm font-bold">{step.desc}</div>
-                </div>
+      {/* Main Content Area */}
+      <div className="bg-white shadow-[12px_12px_24px_#e6e9ef,-12px_-12px_24px_#ffffff] rounded-[32px] border border-white/20 overflow-hidden">
+        {/* Toolbar */}
+        <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row gap-4 items-center justify-between bg-white/50 backdrop-blur-sm">
+          <div className="bg-white shadow-[inset_4px_4px_8px_#e6e9ef,inset_-4px_-4px_8px_#ffffff] flex items-center gap-3 px-4 py-3 rounded-xl flex-1 w-full md:w-auto">
+            <Search className="text-gray-400" size={20} />
+            <input 
+              type="text" 
+              placeholder="Search by reference or requester..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent border-none outline-none text-sm text-gray-700 w-full"
+            />
+          </div>
+          
+          <div className="flex gap-3 w-full md:w-auto">
+            <div className="flex bg-gray-50 p-1 rounded-xl border border-gray-100">
+              {['all', 'draft', 'submitted', 'approved', 'completed'].map((status) => (
+                <button 
+                  key={status}
+                  onClick={() => setStatusFilter(status as any)}
+                  className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+                    statusFilter === status 
+                    ? 'bg-white text-blue-600 shadow-sm' 
+                    : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                </button>
               ))}
             </div>
+            <button className="bg-white shadow-[4px_4px_8px_#e6e9ef,-4px_-4px_8px_#ffffff] px-4 py-2 rounded-xl text-gray-600 hover:text-blue-600 transition-all">
+              <Filter size={18} />
+            </button>
+          </div>
+        </div>
 
-            <div className="bg-white border-2 border-[#d9e7fb] rounded-xl overflow-hidden shadow-xl">
-              <div className="grid grid-cols-3 border-b-2 border-[#d9e7fb]">
-                <div className="p-4 bg-white border-r border-[#d9e7fb] flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black">WHO</div>
-                  <div className="text-[10px] font-black uppercase leading-tight">World Health<br/>Organization</div>
-                </div>
-                <div className="p-4 bg-white border-r border-[#d9e7fb] flex items-center justify-center">
-                  <div className="text-2xl font-black text-rose-600 uppercase tracking-widest">Emergency</div>
-                </div>
-                <div className="p-4 bg-white flex flex-col justify-center items-center">
-                  <div className="text-[10px] font-black text-gray-400 uppercase">Reference</div>
-                  <div className="text-sm font-black">{selectedOrder?.ref}</div>
-                </div>
-              </div>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-50/50">
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Reference</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Requester</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Date</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Items</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Value</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">Status</th>
+                <th className="px-8 py-5 text-[11px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {filteredOrders.map((order) => (
+                <tr key={order.id} className="group hover:bg-blue-50/30 transition-all duration-300">
+                  <td className="px-8 py-5">
+                    <div className="flex flex-col">
+                      <span className="font-black text-gray-800 text-sm">{order.ref}</span>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">ID: {order.id}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs">
+                        {order.name.charAt(0)}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-gray-700 text-sm">{order.name}</span>
+                        <span className="text-[10px] text-gray-400 font-medium">{order.address}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5">
+                    <span className="text-sm font-bold text-gray-600">{order.date}</span>
+                  </td>
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-black text-gray-600">{order.items.length}</span>
+                      <span className="text-xs font-bold text-gray-500">Lines</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5">
+                    <span className="text-sm font-black text-blue-600">${order.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                  </td>
+                  <td className="px-8 py-5">
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${getStatusStyle(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="px-8 py-5 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button 
+                        onClick={() => setSelectedOrderId(order.id)}
+                        className="p-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-lg text-gray-400 hover:text-blue-600 hover:shadow-md transition-all"
+                      >
+                        <Eye size={16} />
+                      </button>
+                      <button className="p-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-lg text-gray-400 hover:text-blue-600 hover:shadow-md transition-all">
+                        <Download size={16} />
+                      </button>
+                      <button className="p-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-lg text-gray-400 hover:text-gray-600 hover:shadow-md transition-all">
+                        <MoreVertical size={16} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-              <div className="grid grid-cols-3">
-                <WhoFormCell label="From (Initiator)" value={selectedOrder?.initiator || ''} type="yellow" />
-                <WhoFormCell label="Mode of Shipment" value={selectedOrder?.shipmentMode || ''} type="default" />
-                <WhoFormCell label="PTEAO" value={selectedOrder?.pteao || 'PENDING'} type="blue" />
-
-                <WhoFormCell label="Consignee Address" value={selectedOrder?.consignee || ''} type="yellow" colSpan={1} />
-                <WhoFormCell label="Nb of Lines" value={selectedOrder?.items.length.toString() || '0'} type="default" />
-                <WhoFormCell label="Estimated Total Cost" value={`USD ${selectedOrder?.value.toFixed(2)}`} type="blue" />
-
-                <WhoFormCell label="Notify Party" value={selectedOrder?.notify || ''} type="default" />
-                <WhoFormCell label="Requested Ready On" value={selectedOrder?.readyDate || ''} type="default" />
-                <WhoFormCell label="Requester Ref" value={selectedOrder?.id || ''} type="blue" />
-              </div>
-
-              <div className="bg-[#11a7e8] text-white px-4 py-2 text-xs font-black uppercase tracking-widest">Order Request Line Items</div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">#</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">WHO Code</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">Description</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">UoM</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">Qty</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-r border-b border-[#d9e7fb]">Unit Price</th>
-                      <th className="px-4 py-2 text-[10px] font-black uppercase border-b border-[#d9e7fb]">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedOrder?.items.map((item, i) => (
-                      <tr key={i}>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb]">{i + 1}</td>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb] font-bold">{item.product.sku}</td>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb] font-bold">{item.product.name}</td>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb] uppercase">{item.product.id === 'kit' ? 'kit' : 'box'}</td>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb] font-bold">{item.qty}</td>
-                        <td className="px-4 py-2 text-xs border-r border-b border-[#d9e7fb]">${item.product.price.toFixed(2)}</td>
-                        <td className="px-4 py-2 text-xs border-b border-[#d9e7fb] font-bold">${(item.qty * item.product.price).toFixed(2)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="grid grid-cols-3 h-24 border-t-2 border-[#11a7e8]">
-                <div className="border-r border-[#d9e7fb] p-2 flex flex-col justify-between">
-                  <span className="text-[9px] font-bold italic text-amber-800">In charge of supply</span>
-                  <div className="h-px bg-gray-200 w-full mb-2" />
-                </div>
-                <div className="border-r border-[#d9e7fb] p-2 flex flex-col justify-between">
-                  <span className="text-[9px] font-bold italic text-amber-800">Reviewer</span>
-                  <div className="h-px bg-gray-200 w-full mb-2" />
-                </div>
-                <div className="p-2 flex flex-col justify-between">
-                  <span className="text-[9px] font-bold italic text-amber-800">Approver</span>
-                  <div className="h-px bg-gray-200 w-full mb-2" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Pagination */}
+        <div className="p-6 border-t border-gray-100 flex items-center justify-between bg-gray-50/30">
+          <div className="text-xs font-bold text-gray-400">
+            Showing <span className="text-gray-700">{filteredOrders.length}</span> of <span className="text-gray-700">{orders.length}</span> orders
+          </div>
+          <div className="flex gap-2">
+            <button className="px-4 py-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-xl text-xs font-bold text-gray-400 cursor-not-allowed">Previous</button>
+            <button className="px-4 py-2 bg-blue-600 text-white shadow-lg shadow-blue-100 rounded-xl text-xs font-bold">1</button>
+            <button className="px-4 py-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-xl text-xs font-bold text-gray-600 hover:text-blue-600 transition-all">2</button>
+            <button className="px-4 py-2 bg-white shadow-[2px_2px_4px_#e6e9ef,-2px_-2px_4px_#ffffff] rounded-xl text-xs font-bold text-gray-600 hover:text-blue-600 transition-all">Next</button>
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }

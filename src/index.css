@@ -4,41 +4,150 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-blue-primary: #0f5bff;
-  --color-blue-dark: #0b49cc;
+  --color-blue-primary: #005eb8;
+  --color-blue-dark: #004a94;
   --color-blue-soft: #eaf1ff;
   --color-bg-main: #f5f7fb;
   --color-panel: #ffffff;
-  --color-line: #e8edf5;
-  --color-text-main: #1c2333;
-  --color-muted: #7c879b;
+  --color-line: #e6e9ef;
+  --color-text-main: #4a5568;
+  --color-muted: #718096;
   --color-success: #17b26a;
   --color-warning: #f79009;
   --color-danger: #f04438;
 
-  --shadow-dashboard: 0 14px 40px rgba(16, 24, 40, 0.08);
-  --radius-dashboard-xl: 28px;
+  --shadow-dashboard: 8px 8px 16px #e6e9ef, -8px -8px 16px #ffffff;
+  --radius-dashboard-xl: 20px;
+}
+
+:root {
+  --bg-color: #ffffff;
+  --shadow-light: #ffffff;
+  --shadow-dark: #e6e9ef;
+  --text-primary: #4a5568;
+  --text-secondary: #718096;
+  --accent: #005eb8;
 }
 
 @layer base {
   body {
-    @apply bg-[#f5f7fb] text-[#1c2333] font-sans antialiased;
-    background: linear-gradient(180deg, #eef3fb 0%, #f8faff 100%);
+    @apply bg-[#f5f7fb] text-[#4a5568] font-sans antialiased;
   }
 }
 
+/* Neumorphic Convex (Raised) */
+@utility neu-flat {
+  background: var(--bg-color);
+  box-shadow: 8px 8px 16px var(--shadow-dark), 
+             -8px -8px 16px var(--shadow-light);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Neumorphic Concave (Pressed) */
+@utility neu-pressed {
+  background: var(--bg-color);
+  box-shadow: inset 6px 6px 12px var(--shadow-dark), 
+             inset -6px -6px 12px var(--shadow-light);
+  border-radius: 16px;
+  border: none;
+}
+
+/* Neumorphic Button */
+@utility neu-btn {
+  background: var(--bg-color);
+  box-shadow: 6px 6px 12px var(--shadow-dark), 
+             -6px -6px 12px var(--shadow-light);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  @apply px-6 py-2 text-sm font-medium;
+}
+
+/* Neumorphic Circle Button */
+@utility neu-circle {
+  background: var(--bg-color);
+  box-shadow: 6px 6px 12px var(--shadow-dark), 
+             -6px -6px 12px var(--shadow-light);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @apply w-12 h-12;
+}
+
+/* Accent Button */
+@utility neu-btn-primary {
+  background: linear-gradient(145deg, #005eb8, #004a94);
+  color: white;
+  box-shadow: 6px 6px 12px var(--shadow-dark), 
+             -6px -6px 12px var(--shadow-light);
+  @apply px-6 py-2 rounded-full text-sm font-medium;
+}
+
+/* Neumorphic Input */
+@utility neu-input {
+  background: var(--bg-color);
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+             inset -4px -4px 8px var(--shadow-light);
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+  @apply px-4 py-2;
+}
+
 @layer components {
+  .neu-btn:hover {
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+    transform: translateY(-2px);
+  }
+
+  .neu-btn:active {
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+               inset -4px -4px 8px var(--shadow-light);
+    transform: translateY(0);
+  }
+
+  .neu-input:focus {
+    box-shadow: inset 6px 6px 12px var(--shadow-dark), 
+               inset -6px -6px 12px var(--shadow-light);
+  }
+
+  .neu-circle:hover {
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+  }
+
+  .neu-circle:active {
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+               inset -4px -4px 8px var(--shadow-light);
+  }
+
+  .neu-btn-primary:hover {
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+    transform: translateY(-2px);
+  }
+
+  .neu-btn-primary:active {
+    box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), 
+               inset -4px -4px 8px rgba(255,255,255,0.1);
+  }
+
   .dashboard-card {
-    @apply bg-white border border-[#e8edf5] rounded-[20px] p-5 shadow-[0_14px_40px_rgba(16,24,40,0.08)];
+    @apply neu-flat p-5;
   }
 
   /* WHO Form Specifics */
   .who-form-container {
-    @apply bg-white text-[#111827] rounded-[22px] overflow-hidden border-2 border-[#d9e7fb] shadow-dashboard;
+    @apply neu-flat overflow-hidden;
   }
 
   .who-cell {
-    @apply min-h-[34px] border-r border-t border-[#d9e7fb] p-2.5 text-xs leading-tight bg-white;
+    @apply min-h-[34px] border-r border-t border-[#e6e9ef] p-2.5 text-xs leading-tight bg-white;
   }
 
   .who-cell-label {
@@ -56,4 +165,64 @@
   .who-section-title {
     @apply bg-[#11a7e8] text-white font-black uppercase tracking-wider px-3 py-2 border-t-2 border-white text-xs;
   }
+
+  /* Main Layout */
+  .app-container {
+    @apply flex h-screen bg-[#f5f7fb] overflow-hidden;
+  }
+
+  .sidebar {
+    @apply w-64 bg-white border-r border-gray-100 flex flex-col h-full sticky top-0 z-50 transition-all duration-500 ease-in-out;
+    background: linear-gradient(180deg, #1A2B4A 0%, #0077B6 100%);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+  }
+
+  .main-content {
+    @apply flex-1 flex flex-col min-w-0 h-full relative overflow-hidden;
+  }
+
+  .header {
+    @apply h-20 bg-white/80 backdrop-blur-md border-b border-white/10 flex items-center px-8 sticky top-0 z-40 transition-all duration-300;
+    background: linear-gradient(90deg, #1A2B4A 0%, #009ADE 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .content-area {
+    @apply flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 154, 222, 0.2) transparent;
+  }
+
+  .content-area::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .content-area::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .content-area::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 154, 222, 0.2);
+    border-radius: 20px;
+  }
+
+}
+
+/* Neumorphic Convex (Raised) */
+@utility neu-flat {
+  background: var(--bg-color);
+  box-shadow: 8px 8px 16px var(--shadow-dark), 
+             -8px -8px 16px var(--shadow-light);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  @apply transition-all duration-300;
+}
+
+/* 3D Chart Effects */
+.chart-3d-shadow {
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+.donut-3d-effect {
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
 }

@@ -24,34 +24,38 @@ const KpiCard = ({ label, value, trend, trendUp, data, color }: {
   data: { value: number }[],
   color: string
 }) => (
-  <div className="bg-white p-5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 transition-transform hover:scale-[1.02] duration-300">
-    <div className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1">{label}</div>
-    <div className="flex items-end justify-between mb-2">
-      <div className="text-2xl font-black">{value}</div>
-      <div className={`flex items-center gap-1 text-[10px] font-bold ${trendUp ? 'text-emerald-500' : 'text-orange-500'}`}>
-        {trendUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-        {trend}
+  <div className="neu-flat p-5 transition-all hover:scale-[1.05] hover:-translate-y-1 duration-300 group overflow-hidden relative">
+    <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-700" />
+    <div className="relative z-10">
+      <div className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{label}</div>
+      <div className="flex items-end justify-between mb-3">
+        <div className="text-2xl font-black text-gray-800 tracking-tight">{value}</div>
+        <div className={`flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-lg ${trendUp ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
+          {trendUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+          {trend}
+        </div>
       </div>
-    </div>
-    <div className="h-12 w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data}>
-          <defs>
-            <linearGradient id={`color${label.replace(/\s/g, '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
-              <stop offset="95%" stopColor={color} stopOpacity={0}/>
-            </linearGradient>
-          </defs>
-          <Area 
-            type="monotone" 
-            dataKey="value" 
-            stroke={color} 
-            fillOpacity={1} 
-            fill={`url(#color${label.replace(/\s/g, '')})`} 
-            strokeWidth={2}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+      <div className="h-14 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id={`color${label.replace(/\s/g, '')}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color} stopOpacity={0.4}/>
+                <stop offset="95%" stopColor={color} stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <Area 
+              type="monotone" 
+              dataKey="value" 
+              stroke={color} 
+              fillOpacity={1} 
+              fill={`url(#color${label.replace(/\s/g, '')})`} 
+              strokeWidth={3}
+              animationDuration={1500}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   </div>
 );
@@ -138,25 +142,25 @@ function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Bar Chart */}
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 lg:col-span-2">
-          <div className="flex justify-between items-center mb-8">
+        <div className="neu-flat p-8 lg:col-span-2">
+          <div className="flex justify-between items-center mb-10">
             <div>
-              <h3 className="text-lg font-black text-gray-800">Hourly Throughput</h3>
-              <p className="text-xs text-gray-400 font-bold">Units processed per time block</p>
+              <h3 className="text-xl font-black text-gray-800">Hourly Throughput</h3>
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Real-time production flow</p>
             </div>
             <div className="flex gap-2">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                <span className="text-[10px] font-bold text-gray-500">Target</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-black text-green-600 uppercase">Live</span>
               </div>
             </div>
           </div>
           
-          <div className="h-[300px] w-full">
+          <div className="h-[320px] w-full chart-3d-shadow">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={throughputData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={throughputData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                 <defs>
-                  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <filter id="barShadow" x="-20%" y="-20%" width="140%" height="140%">
                     <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
                     <feOffset dx="0" dy="4" result="offsetblur" />
                     <feComponentTransfer>
@@ -168,11 +172,11 @@ function Dashboard() {
                     </feMerge>
                   </filter>
                   <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3b82f6" />
-                    <stop offset="100%" stopColor="#1d4ed8" />
+                    <stop offset="0%" stopColor="#009ADE" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#1A2B4A" stopOpacity={1} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                 <XAxis 
                   dataKey="time" 
                   axisLine={false} 
@@ -186,79 +190,121 @@ function Dashboard() {
                   tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
                 />
                 <Tooltip 
-                  cursor={{ fill: '#f8fafc' }}
+                  cursor={{ fill: 'rgba(0, 154, 222, 0.05)', radius: 12 }}
                   contentStyle={{ 
-                    borderRadius: '12px', 
+                    borderRadius: '16px', 
                     border: 'none', 
-                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
                     fontWeight: 'bold',
-                    fontSize: '12px'
+                    padding: '12px'
                   }}
                 />
                 <Bar 
                   dataKey="value" 
                   fill="url(#barGradient)" 
-                  radius={[6, 6, 0, 0]} 
+                  radius={[10, 10, 0, 0]} 
                   barSize={32}
-                  filter="url(#shadow)"
-                >
-                  {throughputData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fillOpacity={index === 5 ? 1 : 0.6} />
-                  ))}
-                </Bar>
+                  filter="url(#barShadow)"
+                  animationDuration={2000}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Donut Chart */}
-        <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50">
+        <div className="neu-flat p-6 overflow-hidden">
           <div className="mb-8">
             <h3 className="text-lg font-black text-gray-800">Regional Output</h3>
             <p className="text-xs text-gray-400 font-bold">Live allocation distribution</p>
           </div>
           
-          <div className="h-[240px] w-full relative">
+          <div className="h-[240px] w-full relative donut-3d-effect">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
+                <defs>
+                  <filter id="pieShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
+                    <feOffset dx="0" dy="8" result="offsetblur" />
+                    <feComponentTransfer>
+                      <feFuncA type="linear" slope="0.3" />
+                    </feComponentTransfer>
+                    <feMerge>
+                      <feMergeNode />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  {regionalData.map((item, i) => (
+                    <linearGradient key={`grad-${i}`} id={`pieGrad-${i}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={item.color} />
+                      <stop offset="100%" stopColor={item.color} stopOpacity={0.8} />
+                    </linearGradient>
+                  ))}
+                </defs>
                 <Tooltip 
                   contentStyle={{ 
-                    borderRadius: '12px', 
+                    borderRadius: '16px', 
                     border: 'none', 
-                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                    fontWeight: 'bold'
+                    boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+                    fontWeight: 'bold',
+                    padding: '12px'
                   }}
                 />
                 <Pie
                   data={regionalData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={8}
+                  innerRadius={65}
+                  outerRadius={85}
+                  paddingAngle={10}
                   dataKey="value"
                   stroke="none"
+                  filter="url(#pieShadow)"
+                  animationBegin={0}
+                  animationDuration={1500}
                 >
                   {regionalData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={`url(#pieGrad-${index})`}
+                      className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+                    />
                   ))}
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-2xl font-black text-gray-800">84%</span>
+              <motion.span 
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="text-3xl font-black text-gray-800"
+              >
+                84%
+              </motion.span>
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Uptime</span>
             </div>
           </div>
 
-          <div className="mt-6 space-y-3">
+          <div className="mt-8 space-y-4">
             {regionalData.map((item, i) => (
-              <div key={i} className="flex justify-between items-center text-xs font-bold">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-gray-600">{item.name}</span>
+              <div key={i} className="group flex justify-between items-center text-xs font-bold p-2 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-full shadow-sm" style={{ backgroundColor: item.color }} />
+                  <span className="text-gray-600 group-hover:text-gray-900 transition-colors">{item.name}</span>
                 </div>
-                <span className="text-gray-800">{item.value}%</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.value}%` }}
+                      transition={{ duration: 1.5, delay: i * 0.1 }}
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
+                  </div>
+                  <span className="text-gray-800 w-8 text-right">{item.value}%</span>
+                </div>
               </div>
             ))}
           </div>
@@ -266,7 +312,7 @@ function Dashboard() {
       </div>
 
       {/* Table Section */}
-      <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-50 overflow-hidden">
+      <div className="neu-flat overflow-hidden">
         <div className="p-6 border-b border-gray-50 flex justify-between items-center">
           <div>
             <h3 className="text-lg font-black text-gray-800">Live Work Orders</h3>
@@ -305,7 +351,7 @@ function Dashboard() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className={`p-2 rounded-xl transition-colors ${row.active ? 'bg-white/20 hover:bg-white/30' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                    <button className={`p-2 rounded-xl transition-colors ${row.active ? 'bg-white/20 hover:bg-white/30' : 'neu-circle w-8 h-8'}`}>
                       <ChevronRight size={16} />
                     </button>
                   </td>

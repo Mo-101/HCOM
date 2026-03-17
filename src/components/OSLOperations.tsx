@@ -1,13 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { AlertCircle } from 'lucide-react';
-
-interface Order {
-  id: string;
-  ref: string;
-  name: string;
-  status: string;
-}
+import { Order } from '../types';
 
 interface OSLOperationsProps {
   orders: Order[];

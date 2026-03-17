@@ -4,8 +4,9 @@ import { adminAPI, countriesAPI, warehouseAPI } from '../services/api';
 import { formatDateTime } from '../utils/helpers';
 import WarehouseManagement from './WarehouseManagement';
 import ClearOrdersModal from './modals/ClearOrdersModal';
+import ConfirmModal from './modals/ConfirmModal';
 import Loading from './Loading';
-import '../styles/AdminView.css';
+// import '../styles/AdminView.css';
 
 // OSL Admin Level labels
 const OSL_LEVELS = [
@@ -31,6 +32,8 @@ function AdminView() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showClearOrdersModal, setShowClearOrdersModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmConfig, setConfirmConfig] = useState({ title: '', message: '', onConfirm: () => {}, variant: 'primary' as any });
   const [clearOrdersMode, setClearOrdersMode] = useState<'country' | 'all'>('country');
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [deletePassword, setDeletePassword] = useState('');
@@ -207,40 +210,48 @@ function AdminView() {
 
   // Handle reset password
   const handleResetPassword = async (userId: any) => {
-    if (!window.confirm('Reset password for this user? They will receive an email with a temporary password.')) {
-      return;
-    }
-
-    try {
-      const response = await adminAPI.resetPassword(userId);
-      if (response.success) {
-        toast.success(`Password reset! New temp password: ${response.data.tempPassword}`, { duration: 10000 });
-        fetchUsers();
-      }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to reset password');
-    }
+    setConfirmConfig({
+      title: 'Reset Password',
+      message: 'Reset password for this user? They will receive an email with a temporary password.',
+      onConfirm: async () => {
+        try {
+          const response = await adminAPI.resetPassword(userId);
+          if (response.success) {
+            toast.success(`Password reset! New temp password: ${response.data.tempPassword}`, { duration: 10000 });
+            fetchUsers();
+          }
+        } catch (err: any) {
+          toast.error(err.message || 'Failed to reset password');
+        }
+      },
+      variant: 'warning'
+    });
+    setShowConfirmModal(true);
   };
 
   // Handle toggle user status
   const handleToggleStatus = async (user: any) => {
     const action = user.is_active ? 'deactivate' : 'activate';
-    if (!window.confirm(`${action.charAt(0).toUpperCase() + action.slice(1)} this user?`)) {
-      return;
-    }
-
-    try {
-      if (user.is_active) {
-        await adminAPI.deactivateUser(user.id);
-      } else {
-        await adminAPI.activateUser(user.id);
-      }
-      toast.success(`User ${action}d successfully`);
-      fetchUsers();
-      fetchStats();
-    } catch (err: any) {
-      toast.error(err.message || `Failed to ${action} user`);
-    }
+    setConfirmConfig({
+      title: `${action.charAt(0).toUpperCase() + action.slice(1)} User`,
+      message: `Are you sure you want to ${action} this user?`,
+      onConfirm: async () => {
+        try {
+          if (user.is_active) {
+            await adminAPI.deactivateUser(user.id);
+          } else {
+            await adminAPI.activateUser(user.id);
+          }
+          toast.success(`User ${action}d successfully`);
+          fetchUsers();
+          fetchStats();
+        } catch (err: any) {
+          toast.error(err.message || `Failed to ${action} user`);
+        }
+      },
+      variant: action === 'deactivate' ? 'danger' : 'primary'
+    });
+    setShowConfirmModal(true);
   };
 
   // Handle delete user
@@ -273,30 +284,34 @@ function AdminView() {
   const handleQuickRoleChange = async (userId: any, currentRole: string, newRole: string) => {
     if (currentRole === newRole) return;
 
-    if (!window.confirm(`Change user role from "${currentRole}" to "${newRole}"? This will take effect immediately.`)) {
-      return;
-    }
+    setConfirmConfig({
+      title: 'Change User Role',
+      message: `Change user role from "${currentRole}" to "${newRole}"? This will take effect immediately.`,
+      onConfirm: async () => {
+        try {
+          const userData: any = { role: newRole };
 
-    try {
-      const userData: any = { role: newRole };
+          if (newRole === 'OSL Team') {
+            userData.oslAdminLevel = 0;
+          }
 
-      if (newRole === 'OSL Team') {
-        userData.oslAdminLevel = 0;
-      }
+          if (currentRole === 'Country Office' && newRole !== 'Country Office') {
+            userData.country = null;
+          }
 
-      if (currentRole === 'Country Office' && newRole !== 'Country Office') {
-        userData.country = null;
-      }
-
-      const response = await adminAPI.updateUser(userId, userData);
-      if (response.success) {
-        toast.success('User role updated successfully');
-        fetchUsers();
-        fetchStats();
-      }
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to update user role');
-    }
+          const response = await adminAPI.updateUser(userId, userData);
+          if (response.success) {
+            toast.success('User role updated successfully');
+            fetchUsers();
+            fetchStats();
+          }
+        } catch (err: any) {
+          toast.error(err.message || 'Failed to update user role');
+        }
+      },
+      variant: 'primary'
+    });
+    setShowConfirmModal(true);
   };
 
   return (
@@ -308,27 +323,27 @@ function AdminView() {
       {/* Stats Cards */}
       {stats && (
         <div className="admin-stats grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.total_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Total Users</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.active_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Active Users</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.country_office_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Country Office</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.lab_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Lab Team</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.osl_users}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">OSL Team</div>
           </div>
-          <div className="stat-card p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="neu-flat p-4">
             <div className="stat-value text-2xl font-bold">{stats.active_last_week}</div>
             <div className="stat-label text-xs text-gray-500 uppercase font-bold">Active (7 days)</div>
           </div>
@@ -375,7 +390,7 @@ function AdminView() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="search-input w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="neu-input w-full pl-10 pr-4 py-2 focus:outline-none"
               />
               <span className="absolute left-3 top-1/2 -translate-y-1/2">🔍</span>
             </div>
@@ -386,7 +401,7 @@ function AdminView() {
                 setRoleFilter(newRole); 
                 fetchUsers(1, { role: newRole || undefined }); 
               }}
-              className="filter-select px-4 py-2 bg-white border border-gray-200 rounded-lg"
+              className="neu-input px-4 py-2"
             >
               <option value="">All Roles</option>
               <option value="Super Admin">Super Admin</option>
@@ -401,19 +416,19 @@ function AdminView() {
                 setStatusFilter(newStatus); 
                 fetchUsers(1, { isActive: newStatus === '' ? undefined : newStatus === 'active' }); 
               }}
-              className="filter-select px-4 py-2 bg-white border border-gray-200 rounded-lg"
+              className="neu-input px-4 py-2"
             >
               <option value="">All Status</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
-            <button onClick={() => setShowCreateModal(true)} className="btn btn-primary px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
+            <button onClick={() => setShowCreateModal(true)} className="neu-btn-primary">
               + Create User
             </button>
           </div>
 
           {/* Users Table */}
-          <div className="admin-table-container bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="neu-flat overflow-hidden">
             {isLoading ? (
               <Loading />
             ) : (
@@ -540,7 +555,7 @@ function AdminView() {
       {/* Activity Logs Tab */}
       {activeTab === 'activity' && (
         <div className="admin-content">
-          <div className="admin-table-container bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="neu-flat overflow-hidden">
             {isLoading ? (
               <Loading />
             ) : (
@@ -593,7 +608,7 @@ function AdminView() {
 
       {/* Order Management Tab */}
       {activeTab === 'orders' && (
-        <div className="admin-content p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div className="neu-flat p-8">
           <div className="order-management-header mb-6">
             <h3 className="text-xl font-bold">Order History Management</h3>
             <p className="text-gray-500">
@@ -621,10 +636,16 @@ function AdminView() {
             </button>
             <button
               onClick={() => {
-                if (window.confirm('⚠️ WARNING: This will delete ALL orders from ALL countries!\n\nAre you absolutely sure?')) {
-                  setClearOrdersMode('all');
-                  setShowClearOrdersModal(true);
-                }
+                setConfirmConfig({
+                  title: 'Nuclear Option: Clear All Orders',
+                  message: '⚠️ WARNING: This will delete ALL orders from ALL countries! This action is permanent and cannot be undone. Are you absolutely sure?',
+                  variant: 'danger',
+                  onConfirm: () => {
+                    setClearOrdersMode('all');
+                    setShowClearOrdersModal(true);
+                  }
+                });
+                setShowConfirmModal(true);
               }}
               className="px-6 py-3 bg-red-800 text-white rounded-xl font-bold hover:bg-red-900 transition-colors"
             >
@@ -653,6 +674,17 @@ function AdminView() {
           onSuccess={() => {
             toast.success('Order history cleared successfully');
           }}
+        />
+      )}
+
+      {showConfirmModal && (
+        <ConfirmModal 
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={confirmConfig.onConfirm}
+          title={confirmConfig.title}
+          message={confirmConfig.message}
+          confirmVariant={confirmConfig.variant}
         />
       )}
     </div>
