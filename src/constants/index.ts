@@ -1,5 +1,25 @@
 import { Product } from '../types';
 
+// Image imports from public folder - Direct paths served by Vite
+const images = {
+  unfpa: '/UNFPA__1_-removebg-preview.png',
+  nitrileGloves: '/Nitrile-examination.png',
+  iehkKit: '/iehk-kit-illustration-removebg-preview.png',
+  safetyBoots: '/Green-PVC-Plastic-Safety-Gumboots-with-Steel-Toe-Caps-Safety-Rain-Boots-removebg-preview.png',
+  medicalSupplies: '/ida-medical-supplies-open-removebg-preview.png',
+  isolationUnit: '/isolation-transport-unit-removebg-preview.png',
+  biomedical: '/Biomedical-Consumables-removebg-preview.png',
+  coldChainFreezer: '/cold-chain-freezer-removebg-preview.png',
+  freezerAucma: '/freezer-aucma-removebg-preview.png',
+  diagnosticTestKit: '/diagnostic-test-kit-removebg-preview.png',
+  rotanta: '/Rotanta-460_-removebg-preview.png',
+  fridge: '/fridge-removebg-preview.png',
+  concoe: '/concoe-removebg-preview.png',
+  coverall: '/Disposable-Safety-Type-5-6-Microporous-Coverall-Chemical-Protective-Clothing-removebg-preview.png',
+  respirator: '/Respirator_21-FFP2-Mask-1-removebg-preview.png',
+  traumaKit: '/trauma-first-aid-kit-removebg-preview.png',
+};
+
 // African Currencies
 export const CURRENCIES = [
   { code: 'USD', symbol: '$', rate: 1, name: 'US Dollar' },
@@ -80,7 +100,7 @@ export const COMMODITIES: Product[] = [
     weight: "12.5 kg",
     dimensions: "60x40x30 cm",
     uom: "kit",
-    image: "https://picsum.photos/seed/unfpa-kit/800/600"
+    image: images.unfpa
   },
   {
     id: '2',
@@ -102,7 +122,7 @@ export const COMMODITIES: Product[] = [
     weight: "0.8 kg",
     dimensions: "24x12x8 cm",
     uom: "box",
-    image: "https://picsum.photos/seed/medical-gloves/800/600"
+    image: images.nitrileGloves
   },
   {
     id: '3',
@@ -124,7 +144,7 @@ export const COMMODITIES: Product[] = [
     weight: "0.5 kg",
     dimensions: "30x20x15 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/sharps-box/800/600"
+    image: images.iehkKit
   },
   {
     id: '4',
@@ -146,7 +166,7 @@ export const COMMODITIES: Product[] = [
     weight: "2.2 kg",
     dimensions: "40x30x15 cm",
     uom: "pair",
-    image: "https://picsum.photos/seed/safety-boots/800/600"
+    image: images.safetyBoots
   },
   {
     id: '5',
@@ -168,7 +188,7 @@ export const COMMODITIES: Product[] = [
     weight: "5.5 kg",
     dimensions: "35x30x25 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/patient-monitor/800/600"
+    image: images.medicalSupplies
   },
   {
     id: '6',
@@ -190,7 +210,7 @@ export const COMMODITIES: Product[] = [
     weight: "8.0 kg",
     dimensions: "190x70x40 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/field-cot/800/600"
+    image: images.isolationUnit
   },
   {
     id: '7',
@@ -212,7 +232,7 @@ export const COMMODITIES: Product[] = [
     weight: "1.5 kg",
     dimensions: "30x20x20 cm",
     uom: "box",
-    image: "https://picsum.photos/seed/biomedical-pack/800/600"
+    image: images.biomedical
   },
   {
     id: '8',
@@ -234,7 +254,7 @@ export const COMMODITIES: Product[] = [
     weight: "14.5 kg",
     dimensions: "50x30x60 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/oxygen-concentrator/800/600"
+    image: images.coldChainFreezer
   },
   {
     id: '9',
@@ -256,7 +276,7 @@ export const COMMODITIES: Product[] = [
     weight: "6.5 kg",
     dimensions: "40x30x30 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/nasal-high-flow/800/600"
+    image: images.freezerAucma
   },
   {
     id: '10',
@@ -278,7 +298,7 @@ export const COMMODITIES: Product[] = [
     weight: "2.5 kg",
     dimensions: "35x25x15 cm",
     uom: "kit",
-    image: "https://picsum.photos/seed/water-test-kit/800/600"
+    image: images.diagnosticTestKit
   },
   {
     id: '11',
@@ -300,7 +320,7 @@ export const COMMODITIES: Product[] = [
     weight: "115.0 kg",
     dimensions: "70x70x50 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/centrifuge/800/600"
+    image: images.rotanta
   },
   {
     id: '12',
@@ -322,7 +342,7 @@ export const COMMODITIES: Product[] = [
     weight: "85.0 kg",
     dimensions: "60x60x160 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/medical-fridge/800/600"
+    image: images.fridge
   },
   {
     id: '13',
@@ -344,7 +364,7 @@ export const COMMODITIES: Product[] = [
     weight: "4.5 kg",
     dimensions: "35x20x25 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/suction-unit/800/600"
+    image: images.concoe
   },
   {
     id: '14',
@@ -366,7 +386,7 @@ export const COMMODITIES: Product[] = [
     weight: "0.3 kg",
     dimensions: "30x25x2 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/coverall/800/600"
+    image: images.coverall
   },
   {
     id: '15',
@@ -388,7 +408,7 @@ export const COMMODITIES: Product[] = [
     weight: "0.01 kg",
     dimensions: "15x15x5 cm",
     uom: "unit",
-    image: "https://picsum.photos/seed/n95-mask/800/600"
+    image: images.respirator
   },
   {
     id: '16',
@@ -410,7 +430,7 @@ export const COMMODITIES: Product[] = [
     weight: "0.8 kg",
     dimensions: "20x15x10 cm",
     uom: "kit",
-    image: "https://picsum.photos/seed/trauma-kit/800/600"
+    image: images.traumaKit
   }
 ];
 
