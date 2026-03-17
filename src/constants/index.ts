@@ -11,6 +11,53 @@ export const CURRENCIES = [
   { code: 'ETB', symbol: 'Br', rate: 56, name: 'Ethiopian Birr' },
 ];
 
+// Country Profiles for pre-population
+export const COUNTRY_PROFILES = [
+  {
+    country: 'Nigeria',
+    consignee: 'Federal Ministry of Health, Abuja',
+    address: 'Plot 71, Federal Secretariat Complex, Shehu Shagari Way, Maitama, Abuja',
+    notify: 'logistics.nigeria@who.int',
+    shipmentMode: 'Air Freight',
+    pteao: 'PTEAO-NG-2024-V1',
+    processingUnit: 'OSL-AFRO-HUB-01'
+  },
+  {
+    country: 'Kenya',
+    consignee: 'Ministry of Health, Nairobi',
+    address: 'Afya House, Cathedral Road, P.O. Box 30016–00100, Nairobi',
+    notify: 'logistics.kenya@who.int',
+    shipmentMode: 'Sea Freight',
+    pteao: 'PTEAO-KE-2024-V2',
+    processingUnit: 'OSL-AFRO-HUB-02'
+  },
+  {
+    country: 'Switzerland',
+    consignee: 'WHO Headquarters, Geneva',
+    address: 'Avenue Appia 20, 1211 Geneva 27',
+    notify: 'logistics.hq@who.int',
+    shipmentMode: 'Road Transport',
+    pteao: 'PTEAO-HQ-2024-V1',
+    processingUnit: 'OSL-HQ-HUB-01'
+  }
+];
+
+// Human-readable status labels for Country Users
+export const COUNTRY_STATUS_LABELS: Record<string, string> = {
+  'draft': 'Draft',
+  'submitted': 'Submitted to OSL',
+  'under_coordination': 'Under AI Coordination',
+  'options_prepared': 'Sourcing Options Ready',
+  'awaiting_country_decision': 'Awaiting Your Decision',
+  'country_option_accepted': 'Option Accepted',
+  'stock_reserved': 'Stock Reserved',
+  'stock_released': 'Material Released',
+  'shipped': 'In Transit',
+  'completed': 'Delivered',
+  'flagged': 'Flagged for Review',
+  'exception_raised': 'Exception - Action Required'
+};
+
 // Sample Commodities
 export const COMMODITIES: Product[] = [
   {
@@ -31,7 +78,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Emergency Response",
     list: ["Emergency delivery kit", "Post-rape treatment kit", "Hygiene supplies", "Medical instruments", "Emergency blankets", "Sterile gloves", "Absorbent pads"],
     weight: "12.5 kg",
-    dimensions: "60x40x30 cm"
+    dimensions: "60x40x30 cm",
+    uom: "kit",
+    image: "https://picsum.photos/seed/unfpa-kit/800/600"
   },
   {
     id: '2',
@@ -51,7 +100,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Protection",
     list: ["100 Nitrile Gloves", "Powder-free formulation", "Latex-free", "Chemical resistant", "Ambidextrous design"],
     weight: "0.8 kg",
-    dimensions: "24x12x8 cm"
+    dimensions: "24x12x8 cm",
+    uom: "box",
+    image: "https://picsum.photos/seed/medical-gloves/800/600"
   },
   {
     id: '3',
@@ -71,7 +122,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Safety",
     list: ["Safety Box 5L capacity", "Locking mechanism", "Biohazard warning markings", "Incineration-ready cardboard", "Fill-level indicator"],
     weight: "0.5 kg",
-    dimensions: "30x20x15 cm"
+    dimensions: "30x20x15 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/sharps-box/800/600"
   },
   {
     id: '4',
@@ -91,7 +144,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Protection",
     list: ["1 Pair Safety Boots", "Steel toe cap protection", "PVC construction", "Slip-resistant sole", "Chemical resistant material", "Steel midsole option"],
     weight: "2.2 kg",
-    dimensions: "40x30x15 cm"
+    dimensions: "40x30x15 cm",
+    uom: "pair",
+    image: "https://picsum.photos/seed/safety-boots/800/600"
   },
   {
     id: '5',
@@ -111,7 +166,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Monitoring",
     list: ["Monitor Unit", "ECG Cable with leads", "SpO2 Finger Probe", "NIBP Cuff (adult)", "Temperature Probe", "Power Adapter", "Rechargeable Battery", "Stand/Wall Mount"],
     weight: "5.5 kg",
-    dimensions: "35x30x25 cm"
+    dimensions: "35x30x25 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/patient-monitor/800/600"
   },
   {
     id: '6',
@@ -131,7 +188,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Support",
     list: ["Foldable Cot Frame", "Durable fabric mattress", "Carry Bag with straps", "IV Pole Attachment", "Patient Safety Straps", "Side rails"],
     weight: "8.0 kg",
-    dimensions: "190x70x40 cm"
+    dimensions: "190x70x40 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/field-cot/800/600"
   },
   {
     id: '7',
@@ -151,7 +210,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Laboratory",
     list: ["Pipette Tips (various sizes)", "Test Tubes (sterile)", "Petri Dishes", "Microscope Slides", "Collection Vials", "Transfer Pipettes", "Microcentrifuge Tubes"],
     weight: "1.5 kg",
-    dimensions: "30x20x20 cm"
+    dimensions: "30x20x20 cm",
+    uom: "box",
+    image: "https://picsum.photos/seed/biomedical-pack/800/600"
   },
   {
     id: '8',
@@ -171,7 +232,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Respiratory",
     list: ["Oxygen Concentrator Unit", "Nasal Cannula (adult)", "Humidifier Bottle", "Air Filter (spare)", "Power Cord", "User Manual", "Oxygen tubing"],
     weight: "14.5 kg",
-    dimensions: "50x30x60 cm"
+    dimensions: "50x30x60 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/oxygen-concentrator/800/600"
   },
   {
     id: '9',
@@ -191,7 +254,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Respiratory",
     list: ["High Flow Generator", "Heated Humidifier Chamber", "Nasal Cannula Set (various sizes)", "Air/Oxygen Blender", "Tubing circuit", "Power cord"],
     weight: "6.5 kg",
-    dimensions: "40x30x30 cm"
+    dimensions: "40x30x30 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/nasal-high-flow/800/600"
   },
   {
     id: '10',
@@ -211,7 +276,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Safety",
     list: ["Test Chambers (sterile)", "Reagent Tablets (various tests)", "Comparator colorimeter", "Thermometer", "pH Test Strips", "Bacteria Test Vials", "Carrying Case", "Instruction Manual"],
     weight: "2.5 kg",
-    dimensions: "35x25x15 cm"
+    dimensions: "35x25x15 cm",
+    uom: "kit",
+    image: "https://picsum.photos/seed/water-test-kit/800/600"
   },
   {
     id: '11',
@@ -231,7 +298,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Laboratory",
     list: ["Centrifuge Unit", "Swing-out Rotor", "Buckets (4x)", "Lid with safety lock", "Power Cord", "User Manual", "Refrigeration system"],
     weight: "115.0 kg",
-    dimensions: "70x70x50 cm"
+    dimensions: "70x70x50 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/centrifuge/800/600"
   },
   {
     id: '12',
@@ -251,7 +320,9 @@ export const COMMODITIES: Product[] = [
     useCase: "Cold Chain",
     list: ["Refrigerator Unit", "Wire Storage Baskets (4x)", "Digital Temperature Monitor", "Ice Pack Freezing Compartment", "Door Lock", "Power Cord", "Voltage stabilizer"],
     weight: "85.0 kg",
-    dimensions: "60x60x160 cm"
+    dimensions: "60x60x160 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/medical-fridge/800/600"
   },
   {
     id: '13',
@@ -271,7 +342,75 @@ export const COMMODITIES: Product[] = [
     useCase: "Emergency Response",
     list: ["Suction Unit", "Collection Canister (1L)", "Suction Tubing (2m)", "Handpiece with tip", "Power Adapter", "Rechargeable Battery Pack", "Carrying Case", "Spare filters"],
     weight: "4.5 kg",
-    dimensions: "35x20x25 cm"
+    dimensions: "35x20x25 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/suction-unit/800/600"
+  },
+  {
+    id: '14',
+    name: "Protective Coverall Type 5/6",
+    category: "PPE",
+    categoryLabel: "Protection",
+    sku: "PPE-COV-001",
+    price: 25.00,
+    stock: 300,
+    shape: 'kit',
+    description: "Disposable protective coverall with hood, elasticated wrists and ankles. Provides protection against hazardous dust and light liquid splashes.",
+    usage: "Infection control, laboratory work, and handling hazardous materials.",
+    dosage: "Single use only. Dispose after each use.",
+    included: "1 Protective Coverall",
+    storage: "Store in a cool, dry place",
+    shelfLife: "60 Months",
+    useCase: "Protection",
+    list: ["Type 5/6 protection", "Elasticated hood", "Breathable material", "Anti-static treatment"],
+    weight: "0.3 kg",
+    dimensions: "30x25x2 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/coverall/800/600"
+  },
+  {
+    id: '15',
+    name: "N95/FFP2 Respirator Mask",
+    category: "PPE",
+    categoryLabel: "Protection",
+    sku: "PPE-MSK-N95",
+    price: 2.50,
+    stock: 5000,
+    shape: 'mask',
+    description: "High-efficiency particulate respirator mask. Filters at least 95% of airborne particles.",
+    usage: "Respiratory protection against airborne pathogens and particulates.",
+    dosage: "Single use. Replace if damaged or soiled.",
+    included: "1 Respirator Mask",
+    storage: "Keep in original packaging",
+    shelfLife: "60 Months",
+    useCase: "Protection",
+    list: ["95% filtration efficiency", "Adjustable nose clip", "Comfortable head straps"],
+    weight: "0.01 kg",
+    dimensions: "15x15x5 cm",
+    uom: "unit",
+    image: "https://picsum.photos/seed/n95-mask/800/600"
+  },
+  {
+    id: '16',
+    name: "Trauma Kit Personal IFAK",
+    category: "First Aid",
+    categoryLabel: "Emergency",
+    sku: "FAK-IFAK-001",
+    price: 120.00,
+    stock: 50,
+    shape: 'kit',
+    description: "Individual First Aid Kit (IFAK) for trauma response. Contains essential life-saving medical supplies.",
+    usage: "Immediate treatment of traumatic injuries in field conditions.",
+    dosage: "N/A",
+    included: "Tourniquet, Pressure dressing, Chest seal, Gauze",
+    storage: "Store in an accessible location",
+    shelfLife: "36 Months",
+    useCase: "Emergency Response",
+    list: ["Tourniquet", "Pressure dressing", "Chest seal", "Hemostatic gauze", "Trauma shears"],
+    weight: "0.8 kg",
+    dimensions: "20x15x10 cm",
+    uom: "kit",
+    image: "https://picsum.photos/seed/trauma-kit/800/600"
   }
 ];
 

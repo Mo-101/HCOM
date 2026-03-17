@@ -1,4 +1,16 @@
-export type OrderStatus = 'draft' | 'submitted' | 'approved' | 'completed' | 'flagged';
+export type OrderStatus = 
+  | 'draft' 
+  | 'submitted' 
+  | 'under_coordination' 
+  | 'options_prepared' 
+  | 'awaiting_country_decision' 
+  | 'country_option_accepted' 
+  | 'stock_reserved' 
+  | 'stock_released' 
+  | 'shipped' 
+  | 'completed' 
+  | 'flagged' 
+  | 'exception_raised';
 
 export interface Product {
   id: string;
@@ -19,6 +31,8 @@ export interface Product {
   list: string[];
   weight: string;
   dimensions: string;
+  uom: string;
+  image?: string;
 }
 
 export interface Order {
@@ -46,7 +60,18 @@ export interface Order {
   volume: number;
   confirmedVolume: number;
   remarks: string;
-  items: { product: Product, qty: number }[];
+  items: { product: Product, qty: number, batch?: string, expiry?: string }[];
+  // New WHO Form Fields
+  description?: string;
+  version?: string;
+  purpose?: string;
+  estimatedNbParcels?: number;
+  estimatedShipCost?: number;
+  nbParcels?: number;
+  nbBoxes?: number;
+  freightChargesPayable?: string;
+  shippingDocumentsRequired?: string;
+  exceptions?: string[];
 }
 
 export interface User {

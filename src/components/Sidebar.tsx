@@ -8,6 +8,9 @@ import {
   Tag,
   FileText,
   Beaker,
+  ShieldAlert,
+  Warehouse,
+  Search,
   ChevronLeft,
   ChevronRight,
   LogOut,
@@ -20,19 +23,19 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  userRole: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'orders', label: 'Order', icon: ShoppingCart },
-    { id: 'statistic', label: 'Statistic', icon: PieChart },
-    { id: 'catalog', label: 'Product', icon: Package },
-    { id: 'inventory', label: 'Inventory', icon: Layers },
-    { id: 'drafts', label: 'Drafts', icon: FileText },
-    { id: 'laboratory', label: 'Laboratory', icon: Beaker },
-    { id: 'admin', label: 'Offer', icon: Tag },
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isOpen, setIsOpen, userRole }) => {
+  const allMenuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['Super Admin', 'OSL Team', 'Laboratory Team', 'Country Office'] },
+    { id: 'catalog', label: 'Catalog', icon: Package, roles: ['Super Admin', 'Country Office'] },
+    { id: 'orders', label: 'Orders', icon: ShoppingCart, roles: ['Super Admin', 'OSL Team', 'Laboratory Team', 'Country Office'] },
+    { id: 'operations', label: 'OSL Operations', icon: ShieldAlert, roles: ['Super Admin', 'OSL Team', 'Laboratory Team'] },
+    { id: 'warehouse', label: 'Warehouse', icon: Warehouse, roles: ['Super Admin', 'OSL Team'] },
   ];
+
+  const menuItems = allMenuItems.filter(item => item.roles.includes(userRole));
 
   return (
     <motion.aside 

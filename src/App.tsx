@@ -8,15 +8,13 @@ import { Toaster } from 'react-hot-toast';
 import { 
   Header, 
   Sidebar,
-  Dashboard, 
+  DashboardView, 
   CatalogView, 
   OrdersView, 
   OSLOperations, 
-  AdminView,
-  StatisticView,
-  InventoryView,
-  DraftsView,
-  LaboratoryView
+  WarehouseManagement,
+  WHOOrderForm,
+  MoScriptToast
 } from './components';
 import { COMMODITIES, INITIAL_ORDERS } from './constants';
 import { Order, OrderStatus, Product } from './types';
@@ -40,7 +38,8 @@ const PRODUCTS: Product[] = COMMODITIES.map(c => ({
   storage: c.storage,
   list: c.list,
   weight: c.weight,
-  dimensions: c.dimensions
+  dimensions: c.dimensions,
+  uom: c.uom
 }));
 
 // Map INITIAL_ORDERS to the Order type
@@ -53,7 +52,7 @@ const MAPPED_ORDERS: Order[] = INITIAL_ORDERS.map(o => ({
   value: o.items.reduce((acc, item) => acc + item.commodity.price * item.qty, 0),
   status: (o.status.toLowerCase().includes('draft') ? 'draft' : 
            o.status.toLowerCase().includes('submitted') ? 'submitted' : 
-           o.status.toLowerCase().includes('approved') ? 'approved' : 'completed') as OrderStatus,
+           o.status.toLowerCase().includes('approved') ? 'under_coordination' : 'completed') as OrderStatus,
   initiator: 'Regional Logistics Hub',
   shipmentMode: 'Air Freight',
   pteao: (o as any).pateoRef || '',
@@ -71,6 +70,13 @@ const MAPPED_ORDERS: Order[] = INITIAL_ORDERS.map(o => ({
   dimensions: '120x80x100 cm',
   confirmedWeight: 45.5,
   confirmedVolume: 0.96,
+  description: 'Emergency replenishment for regional hub',
+  version: '1.0',
+  purpose: 'Response - Stock replenishment for emergency operations',
+  estimatedNbParcels: 12,
+  estimatedShipCost: 1250,
+  freightChargesPayable: 'WHO',
+  shippingDocumentsRequired: 'Packing list, Release note, Airway bill',
   items: o.items.map(item => ({
     product: PRODUCTS.find(p => p.name === item.commodity.name) || PRODUCTS[0],
     qty: item.qty
@@ -89,6 +95,30 @@ export default function App() {
   const [cart, setCart] = useState<{ product: Product, qty: number }[]>([]);
   const [orders, setOrders] = useState<Order[]>(MAPPED_ORDERS);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [aiLogs, setAiLogs] = useState<{id: string, msg: string, time: string}[]>([]);
+
+  // Global AI Coordination Simulation
+  React.useEffect(() => {
+    const coordinating = orders.find(o => o.status === 'under_coordination');
+    if (coordinating) {
+      const timer = setTimeout(() => {
+        setAiLogs(prev => [
+          { id: coordinating.id, msg: `AI Coordinator: Analyzing inventory for ${coordinating.ref}...`, time: new Date().toLocaleTimeString() },
+          ...prev
+        ]);
+        
+        setTimeout(() => {
+          setAiLogs(prev => [
+            { id: coordinating.id, msg: `AI Coordinator: FEFO check complete. Sourcing options identified.`, time: new Date().toLocaleTimeString() },
+            ...prev
+          ]);
+          updateOrderStatus(coordinating.id, 'options_prepared');
+        }, 2000);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [orders]);
 
   const addToCart = (product: Product, qty: number) => {
     setCart(prev => {
@@ -102,23 +132,27 @@ export default function App() {
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
+    setShowOrderForm(true);
+  };
+
+  const confirmOrder = (formData: any) => {
     const newOrder: Order = {
       id: `ORD-${Date.now()}`,
       ref: `REF-${Math.floor(Math.random() * 10000)}`,
       name: currentUser.name,
-      address: `${currentUser.country} Office`,
+      address: formData.address,
       date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
       value: cart.reduce((acc, item) => acc + item.product.price * item.qty, 0),
-      status: 'draft',
-      initiator: 'HCOMS Portal User',
-      shipmentMode: 'Air Freight',
-      pteao: '',
-      consignee: 'Regional Hub',
-      notify: 'logistics@who.int',
+      status: 'submitted', // Start as submitted as per WHO form submission
+      initiator: currentUser.name,
+      shipmentMode: formData.shipmentMode,
+      pteao: formData.pteao,
+      consignee: formData.consignee,
+      notify: formData.notify,
       readyDate: 'TBD',
       weight: 0,
       volume: 0,
-      remarks: 'Order placed via catalog.',
+      remarks: formData.remarks || 'Order placed via WHO Order Request Form.',
       processingUnit: 'OSL-HUB-01',
       goodsCost: cart.reduce((acc, item) => acc + item.product.price * item.qty, 0),
       requesterRef: `REQ-${Math.floor(Math.random() * 10000)}`,
@@ -127,10 +161,18 @@ export default function App() {
       dimensions: 'TBD',
       confirmedWeight: 0,
       confirmedVolume: 0,
+      description: formData.description,
+      version: '1.0',
+      purpose: formData.purpose,
+      estimatedNbParcels: Math.ceil(cart.length * 1.5),
+      estimatedShipCost: 0,
+      freightChargesPayable: formData.freightChargesPayable,
+      shippingDocumentsRequired: formData.shippingDocumentsRequired,
       items: [...cart]
     };
     setOrders([newOrder, ...orders]);
     setCart([]);
+    setShowOrderForm(false);
     setActiveTab('orders');
     setSelectedOrderId(newOrder.id);
   };
@@ -161,6 +203,7 @@ export default function App() {
         setActiveTab={setActiveTab} 
         isOpen={isSidebarOpen} 
         setIsOpen={setIsSidebarOpen} 
+        userRole={currentUser.role}
       />
 
       <div className="main-content">
@@ -176,7 +219,7 @@ export default function App() {
         />
 
         <main className="content-area">
-          {activeTab === 'dashboard' && <Dashboard />}
+          {activeTab === 'dashboard' && <DashboardView />}
           {activeTab === 'catalog' && (
             <CatalogView 
               products={PRODUCTS} 
@@ -192,30 +235,43 @@ export default function App() {
               setSelectedOrderId={setSelectedOrderId}
             />
           )}
-          {activeTab === 'statistic' && <StatisticView />}
-          {activeTab === 'osl-operations' && (
+          {activeTab === 'operations' && (
             <OSLOperations 
               orders={orders} 
               onUpdateStatus={updateOrderStatus} 
+              onOrderClick={handleOrderClick}
             />
           )}
-          {activeTab === 'admin' && <AdminView />}
-          {activeTab === 'inventory' && <InventoryView products={PRODUCTS} />}
-          {activeTab === 'drafts' && (
-            <DraftsView 
+          {activeTab === 'warehouse' && (
+            <WarehouseManagement 
               orders={orders} 
               onUpdateStatus={updateOrderStatus} 
-              onSelectOrder={handleOrderClick} 
             />
           )}
-          {activeTab === 'laboratory' && <LaboratoryView />}
           
-          {/* Placeholder for other views */}
-          {['offer', 'review'].includes(activeTab) && (
+          {showOrderForm && (
+            <WHOOrderForm 
+              cart={cart} 
+              currentUser={currentUser} 
+              onSubmit={confirmOrder} 
+              onCancel={() => setShowOrderForm(false)} 
+            />
+          )}
+
+          <MoScriptToast logs={aiLogs} onClear={() => setAiLogs([])} />
+
+          {/* Fallback for any legacy tabs that might still be triggered */}
+          {['admin', 'offer', 'review', 'drafts', 'laboratory', 'statistic', 'inventory'].includes(activeTab) && (
             <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
               <h2 className="text-2xl font-bold text-gray-400 italic">
-                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} View Implementation in Progress...
+                This section has been consolidated into one of the 5 main tabs.
               </h2>
+              <button 
+                onClick={() => setActiveTab('dashboard')}
+                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl font-bold"
+              >
+                Go to Dashboard
+              </button>
             </div>
           )}
         </main>

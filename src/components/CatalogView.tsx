@@ -149,10 +149,21 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
 
                   <div className="h-48 p-4 flex items-center justify-center relative">
                     <div className="w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full absolute blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
-                    <div className="relative z-0 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-400">
-                      {product.shape === 'kit' && <PlusCircle size={64} className="text-blue-600 drop-shadow-lg" />}
-                      {product.shape === 'mask' && <div className="w-32 h-16 bg-white rounded-2xl shadow-lg border border-blue-100" />}
-                      {product.shape === 'glove' && <div className="w-20 h-28 bg-white rounded-t-full shadow-lg border border-blue-100" />}
+                    <div className="relative z-0 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-400 w-full h-full flex items-center justify-center">
+                      {product.image ? (
+                        <img 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="max-w-full max-h-full object-contain drop-shadow-xl"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <>
+                          {product.shape === 'kit' && <PlusCircle size={64} className="text-blue-600 drop-shadow-lg" />}
+                          {product.shape === 'mask' && <div className="w-32 h-16 bg-white rounded-2xl shadow-lg border border-blue-100" />}
+                          {product.shape === 'glove' && <div className="w-20 h-28 bg-white rounded-t-full shadow-lg border border-blue-100" />}
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -221,17 +232,34 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                 <div className="flex flex-col items-center justify-center">
                   <div className="relative w-full h-80 flex items-center justify-center mb-6">
                     <div className="w-64 h-64 bg-blue-50 rounded-full absolute blur-3xl opacity-30"></div>
-                    <div className="relative z-10 drop-shadow-2xl hover:scale-105 transition-transform duration-500">
-                      {selectedProduct.shape === 'kit' && <PlusCircle size={160} className="text-blue-600" />}
-                      {selectedProduct.shape === 'mask' && <div className="w-64 h-32 bg-white rounded-3xl shadow-xl border border-blue-50" />}
-                      {selectedProduct.shape === 'glove' && <div className="w-40 h-56 bg-white rounded-t-full shadow-xl border border-blue-50" />}
+                    <div className="relative z-10 drop-shadow-2xl hover:scale-105 transition-transform duration-500 w-full h-full flex items-center justify-center">
+                      {selectedProduct.image ? (
+                        <img 
+                          src={selectedProduct.image} 
+                          alt={selectedProduct.name} 
+                          className="max-w-full max-h-full object-contain"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <>
+                          {selectedProduct.shape === 'kit' && <PlusCircle size={160} className="text-blue-600" />}
+                          {selectedProduct.shape === 'mask' && <div className="w-64 h-32 bg-white rounded-3xl shadow-xl border border-blue-50" />}
+                          {selectedProduct.shape === 'glove' && <div className="w-40 h-56 bg-white rounded-t-full shadow-xl border border-blue-50" />}
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <button className="w-16 h-16 rounded-xl overflow-hidden bg-white border-2 border-blue-500 p-2 shadow-md">
-                      {selectedProduct.shape === 'kit' && <PlusCircle size={32} className="text-blue-600 mx-auto" />}
-                      {selectedProduct.shape === 'mask' && <div className="w-full h-4 bg-blue-100 rounded mt-4" />}
-                      {selectedProduct.shape === 'glove' && <div className="w-6 h-8 bg-blue-100 rounded-t-full mx-auto mt-2" />}
+                    <button className="w-16 h-16 rounded-xl overflow-hidden bg-white border-2 border-blue-500 p-2 shadow-md flex items-center justify-center">
+                      {selectedProduct.image ? (
+                        <img src={selectedProduct.image} alt="Thumbnail" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                      ) : (
+                        <>
+                          {selectedProduct.shape === 'kit' && <PlusCircle size={32} className="text-blue-600 mx-auto" />}
+                          {selectedProduct.shape === 'mask' && <div className="w-full h-4 bg-blue-100 rounded mt-4" />}
+                          {selectedProduct.shape === 'glove' && <div className="w-6 h-8 bg-blue-100 rounded-t-full mx-auto mt-2" />}
+                        </>
+                      )}
                     </button>
                     {[1, 2].map(i => (
                       <button key={i} className="w-16 h-16 rounded-xl overflow-hidden bg-white border-2 border-transparent opacity-40 hover:opacity-100 p-2 transition-all">

@@ -5,7 +5,7 @@ export { default as NotificationBell } from './NotificationBell';
 export { default as Loading } from './Loading';
 
 // View Components
-export { default as Dashboard } from './Dashboard';
+export { default as DashboardView } from './DashboardView';
 export { default as CatalogView } from './CatalogView';
 export { default as OrdersView } from './OrdersView';
 export { default as OSLOperations } from './OSLOperations';
@@ -16,6 +16,10 @@ export { default as InventoryView } from './InventoryView';
 export { default as DraftsView } from './DraftsView';
 export { default as LaboratoryView } from './LaboratoryView';
 export { default as OrderDetailView } from './OrderDetailView';
+export { default as OfferView } from './OfferView';
+export { default as ReviewView } from './ReviewView';
+export { default as WHOOrderForm } from './WHOOrderForm';
+export { default as MoScriptToast } from './MoScriptToast';
 
 // Modal Components
 export { default as ClearOrdersModal } from './modals/ClearOrdersModal';
