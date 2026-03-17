@@ -4,6 +4,44 @@ import { Search, PlusCircle, ArrowLeft, CheckCircle2, ShoppingCart, Minus, Plus,
 import { Product } from '../types';
 import { CURRENCIES } from '../constants';
 
+// Import product images
+import unfpaImg from '../../public/UNFPA__1_-removebg-preview.png';
+import nitrileGlovesImg from '../../public/Nitrile-examination.png';
+import iehkKitImg from '../../public/iehk-kit-illustration-removebg-preview.png';
+import safetyBootsImg from '../../public/Green-PVC-Plastic-Safety-Gumboots-with-Steel-Toe-Caps-Safety-Rain-Boots-removebg-preview.png';
+import medicalSuppliesImg from '../../public/ida-medical-supplies-open-removebg-preview.png';
+import isolationUnitImg from '../../public/isolation-transport-unit-removebg-preview.png';
+import biomedicalImg from '../../public/Biomedical-Consumables-removebg-preview.png';
+import coldChainFreezerImg from '../../public/cold-chain-freezer-removebg-preview.png';
+import freezerAucmaImg from '../../public/freezer-aucma-removebg-preview.png';
+import diagnosticTestKitImg from '../../public/diagnostic-test-kit-removebg-preview.png';
+import rotantaImg from '../../public/Rotanta-460_-removebg-preview.png';
+import fridgeImg from '../../public/fridge-removebg-preview.png';
+import concoeImg from '../../public/concoe-removebg-preview.png';
+import coverallImg from '../../public/Disposable-Safety-Type-5-6-Microporous-Coverall-Chemical-Protective-Clothing-removebg-preview.png';
+import respiratorImg from '../../public/Respirator_21-FFP2-Mask-1-removebg-preview.png';
+import traumaKitImg from '../../public/trauma-first-aid-kit-removebg-preview.png';
+
+// Map product IDs to imported images
+const productImages: Record<string, string> = {
+  '1': unfpaImg,
+  '2': nitrileGlovesImg,
+  '3': iehkKitImg,
+  '4': safetyBootsImg,
+  '5': medicalSuppliesImg,
+  '6': isolationUnitImg,
+  '7': biomedicalImg,
+  '8': coldChainFreezerImg,
+  '9': freezerAucmaImg,
+  '10': diagnosticTestKitImg,
+  '11': rotantaImg,
+  '12': fridgeImg,
+  '13': concoeImg,
+  '14': coverallImg,
+  '15': respiratorImg,
+  '16': traumaKitImg,
+};
+
 interface CatalogViewProps {
   products: Product[];
   onAddToCart: (product: Product, qty: number) => void;
@@ -20,9 +58,9 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
 
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
-      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           p.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = activeCategory === 'all' || p.category.toLowerCase().includes(activeCategory.toLowerCase());
       return matchesSearch && matchesCategory;
     });
@@ -42,14 +80,14 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
   ];
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="space-y-6"
     >
       <AnimatePresence mode="wait">
         {!selectedProduct ? (
-          <motion.div 
+          <motion.div
             key="catalog"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -62,11 +100,11 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                 <h1 className="text-3xl font-bold text-gray-800">Medical Products</h1>
                 <p className="text-gray-500 mt-1">Browse emergency health kits, PPE, and medical supplies</p>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500 font-medium">Currency:</span>
-                  <select 
+                  <select
                     value={currentCurrency.code}
                     onChange={(e) => setCurrentCurrency(CURRENCIES.find(c => c.code === e.target.value) || CURRENCIES[0])}
                     className="bg-white shadow-[inset_3px_3px_6px_#e6e9ef,inset_-3px_-3px_6px_#ffffff] px-4 py-2 text-sm font-semibold text-gray-700 rounded-xl border-none outline-none cursor-pointer"
@@ -82,14 +120,13 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
             {/* Category Filters */}
             <div className="flex flex-wrap gap-3">
               {categories.map(cat => (
-                <button 
+                <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-5 py-2 text-sm font-medium rounded-full transition-all ${
-                    activeCategory === cat.id 
-                    ? 'bg-blue-600 text-white shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.1)] scale-105' 
+                  className={`px-5 py-2 text-sm font-medium rounded-full transition-all ${activeCategory === cat.id
+                    ? 'bg-blue-600 text-white shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.1)] scale-105'
                     : 'bg-white text-gray-600 shadow-[4px_4px_8px_#e6e9ef,-4px_-4px_8px_#ffffff] hover:bg-blue-600 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {cat.label}
                 </button>
@@ -100,15 +137,15 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
             <div className="bg-white shadow-[8px_8px_16px_#e6e9ef,-8px_-8px_16px_#ffffff] p-4 rounded-[20px] border border-white/20 flex flex-col md:flex-row gap-4 items-center justify-between">
               <div className="bg-white shadow-[inset_4px_4px_8px_#e6e9ef,inset_-4px_-4px_8px_#ffffff] flex items-center gap-3 px-4 py-3 rounded-xl flex-1 w-full md:w-auto">
                 <Search className="text-gray-400" size={20} />
-                <input 
-                  type="text" 
-                  placeholder="Search products, SKUs, or categories..." 
+                <input
+                  type="text"
+                  placeholder="Search products, SKUs, or categories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-transparent border-none outline-none text-sm text-gray-700 w-full"
                 />
               </div>
-              
+
               <div className="flex gap-3 w-full md:w-auto">
                 <button className="bg-white shadow-[6px_6px_12px_#e6e9ef,-6px_-6px_12px_#ffffff] px-5 py-3 text-sm font-medium text-gray-600 flex items-center gap-2 rounded-full hover:shadow-[4px_4px_8px_#e6e9ef,-4px_-4px_8px_#ffffff] transition-all">
                   <Filter size={16} />
@@ -132,7 +169,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
             {/* Products Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
-                <motion.div 
+                <motion.div
                   key={product.id}
                   whileHover={{ y: -8 }}
                   className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[24px] overflow-hidden group relative transition-all duration-400 hover:bg-white/90 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08),0_0_0_1px_rgba(0,94,184,0.1),inset_0_1px_0_rgba(255,255,255,0.8)]"
@@ -150,12 +187,11 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   <div className="h-48 p-4 flex items-center justify-center relative">
                     <div className="w-32 h-32 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full absolute blur-2xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
                     <div className="relative z-0 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-400 w-full h-full flex items-center justify-center">
-                      {product.image ? (
-                        <img 
-                          src={product.image} 
-                          alt={product.name} 
+                      {productImages[product.id] ? (
+                        <img
+                          src={productImages[product.id]}
+                          alt={product.name}
                           className="max-w-full max-h-full object-contain drop-shadow-xl"
-                          referrerPolicy="no-referrer"
                         />
                       ) : (
                         <>
@@ -177,7 +213,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                       <span className="font-mono text-[10px] text-gray-400 bg-gray-50 px-2 py-1 rounded-full border border-gray-100">SKU {product.sku}</span>
                     </div>
                     <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-4">{product.description}</p>
-                    
+
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-baseline gap-1">
                         <span className="text-2xl font-extrabold bg-gradient-to-br from-blue-600 to-blue-800 bg-clip-text text-transparent">
@@ -186,16 +222,16 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                         <span className="text-xs font-bold text-gray-400">{currentCurrency.code}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-3">
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); onAddToCart(product, 1); }}
                         className="flex-1 h-11 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all"
                       >
                         <ShoppingCart size={16} />
                         Quick Order
                       </button>
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); }}
                         className="w-11 h-11 bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
                       >
@@ -208,7 +244,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
             </div>
           </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             key="detail"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -227,18 +263,17 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
             {/* Product Detail Card */}
             <div className="bg-white shadow-[8px_8px_16px_#e6e9ef,-8px_-8px_16px_#ffffff] p-6 md:p-8 rounded-[20px] border border-white/20">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
+
                 {/* Left: Product Image */}
                 <div className="flex flex-col items-center justify-center">
                   <div className="relative w-full h-80 flex items-center justify-center mb-6">
                     <div className="w-64 h-64 bg-blue-50 rounded-full absolute blur-3xl opacity-30"></div>
                     <div className="relative z-10 drop-shadow-2xl hover:scale-105 transition-transform duration-500 w-full h-full flex items-center justify-center">
-                      {selectedProduct.image ? (
-                        <img 
-                          src={selectedProduct.image} 
-                          alt={selectedProduct.name} 
+                      {productImages[selectedProduct.id] ? (
+                        <img
+                          src={productImages[selectedProduct.id]}
+                          alt={selectedProduct.name}
                           className="max-w-full max-h-full object-contain"
-                          referrerPolicy="no-referrer"
                         />
                       ) : (
                         <>
@@ -251,8 +286,8 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   </div>
                   <div className="flex gap-3">
                     <button className="w-16 h-16 rounded-xl overflow-hidden bg-white border-2 border-blue-500 p-2 shadow-md flex items-center justify-center">
-                      {selectedProduct.image ? (
-                        <img src={selectedProduct.image} alt="Thumbnail" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                      {productImages[selectedProduct.id] ? (
+                        <img src={productImages[selectedProduct.id]} alt="Thumbnail" className="w-full h-full object-contain" />
                       ) : (
                         <>
                           {selectedProduct.shape === 'kit' && <PlusCircle size={32} className="text-blue-600 mx-auto" />}
@@ -275,9 +310,9 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                     <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wider">{selectedProduct.categoryLabel}</span>
                     <span className="text-[10px] text-gray-400 font-mono">SKU {selectedProduct.sku}</span>
                   </div>
-                  
+
                   <h1 className="text-3xl font-bold text-gray-900 leading-tight">{selectedProduct.name}</h1>
-                  
+
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -303,14 +338,13 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                     </div>
                     <div className="flex gap-2">
                       {CURRENCIES.slice(0, 3).map(c => (
-                        <button 
+                        <button
                           key={c.code}
                           onClick={() => setCurrentCurrency(c)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                            currentCurrency.code === c.code 
-                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${currentCurrency.code === c.code
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
                             : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-                          }`}
+                            }`}
                         >
                           {c.symbol} {c.code}
                         </button>
@@ -321,34 +355,34 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   {/* Quantity & Actions */}
                   <div className="flex items-center gap-4 pt-2">
                     <div className="bg-gray-50 p-2 rounded-xl flex items-center gap-2 border border-gray-100">
-                      <button 
+                      <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
                         className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-blue-600 transition-all"
                       >
                         <Minus size={16} />
                       </button>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         value={quantity}
                         onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                         className="w-14 text-center font-bold bg-transparent border-none outline-none text-gray-800 text-lg"
                       />
-                      <button 
+                      <button
                         onClick={() => setQuantity(quantity + 1)}
                         className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-gray-600 hover:text-blue-600 transition-all"
                       >
                         <Plus size={16} />
                       </button>
                     </div>
-                    
-                    <button 
+
+                    <button
                       onClick={() => { onAddToCart(selectedProduct, quantity); setSelectedProduct(null); }}
                       className="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                     >
                       <ShoppingCart size={20} />
                       Add to Order
                     </button>
-                    
+
                     <button className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
                       <Heart size={20} />
                     </button>
@@ -380,14 +414,13 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <div className="flex gap-1 mb-6 bg-gray-50 p-1.5 rounded-xl w-fit">
                   {['specs', 'contents', 'usage', 'shipping'].map(tab => (
-                    <button 
+                    <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-6 py-2 text-sm font-bold rounded-lg transition-all ${
-                        activeTab === tab 
-                        ? 'bg-white text-blue-600 shadow-sm' 
+                      className={`px-6 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === tab
+                        ? 'bg-white text-blue-600 shadow-sm'
                         : 'text-gray-500 hover:text-gray-700'
-                      }`}
+                        }`}
                     >
                       {tab.charAt(0).toUpperCase() + tab.slice(1)}
                     </button>
@@ -396,7 +429,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
 
                 <AnimatePresence mode="wait">
                   {activeTab === 'specs' && (
-                    <motion.div 
+                    <motion.div
                       key="specs"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -440,7 +473,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   )}
 
                   {activeTab === 'contents' && (
-                    <motion.div 
+                    <motion.div
                       key="contents"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -461,7 +494,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   )}
 
                   {activeTab === 'usage' && (
-                    <motion.div 
+                    <motion.div
                       key="usage"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -488,7 +521,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
                   )}
 
                   {activeTab === 'shipping' && (
-                    <motion.div 
+                    <motion.div
                       key="shipping"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
