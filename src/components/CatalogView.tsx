@@ -225,7 +225,7 @@ function CatalogView({ products, onAddToCart, onCheckout }: CatalogViewProps) {
 
                     <div className="flex gap-3">
                       <button
-                        onClick={(e) => { e.stopPropagation(); onAddToCart(product, 1); }}
+                        onClick={(e) => { e.stopPropagation(); onAddToCart(product, 1); onCheckout(); }}
                         className="flex-1 h-11 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-0.5 transition-all"
                       >
                         <ShoppingCart size={16} />

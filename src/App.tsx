@@ -5,13 +5,13 @@
 
 import React, { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { 
-  Header, 
+import {
+  Header,
   Sidebar,
-  DashboardView, 
-  CatalogView, 
-  OrdersView, 
-  OSLOperations, 
+  DashboardView,
+  CatalogView,
+  OrdersView,
+  OSLOperations,
   WarehouseManagement,
   WHOOrderForm,
   MoScriptToast
@@ -50,9 +50,9 @@ const MAPPED_ORDERS: Order[] = INITIAL_ORDERS.map(o => ({
   address: `${o.country} Office`,
   date: o.date,
   value: o.items.reduce((acc, item) => acc + item.commodity.price * item.qty, 0),
-  status: (o.status.toLowerCase().includes('draft') ? 'draft' : 
-           o.status.toLowerCase().includes('submitted') ? 'submitted' : 
-           o.status.toLowerCase().includes('approved') ? 'under_coordination' : 'completed') as OrderStatus,
+  status: (o.status.toLowerCase().includes('draft') ? 'draft' :
+    o.status.toLowerCase().includes('submitted') ? 'submitted' :
+      o.status.toLowerCase().includes('approved') ? 'under_coordination' : 'completed') as OrderStatus,
   initiator: 'Regional Logistics Hub',
   shipmentMode: 'Air Freight',
   pteao: (o as any).pateoRef || '',
@@ -89,14 +89,29 @@ export default function App() {
     role: 'Super Admin',
     country: 'Switzerland'
   });
-  
+
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [cart, setCart] = useState<{ product: Product, qty: number }[]>([]);
-  const [orders, setOrders] = useState<Order[]>(MAPPED_ORDERS);
+  const [cart, setCart] = useState<{ product: Product, qty: number }[]>(() => {
+    try {
+      const raw = localStorage.getItem('hcom_cart');
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [orders, setOrders] = useState<Order[]>(() => {
+    try {
+      const raw = localStorage.getItem('hcom_orders');
+      return raw ? JSON.parse(raw) : MAPPED_ORDERS;
+    } catch (e) {
+      return MAPPED_ORDERS;
+    }
+  });
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [showOrderForm, setShowOrderForm] = useState(false);
-  const [aiLogs, setAiLogs] = useState<{id: string, msg: string, time: string}[]>([]);
+  const [aiLogs, setAiLogs] = useState<{ id: string, msg: string, time: string }[]>([]);
 
   // Global AI Coordination Simulation
   React.useEffect(() => {
@@ -107,7 +122,7 @@ export default function App() {
           { id: coordinating.id, msg: `AI Coordinator: Analyzing inventory for ${coordinating.ref}...`, time: new Date().toLocaleTimeString() },
           ...prev
         ]);
-        
+
         setTimeout(() => {
           setAiLogs(prev => [
             { id: coordinating.id, msg: `AI Coordinator: FEFO check complete. Sourcing options identified.`, time: new Date().toLocaleTimeString() },
@@ -129,6 +144,15 @@ export default function App() {
       return [...prev, { product, qty }];
     });
   };
+
+  // persist cart and orders to localStorage
+  React.useEffect(() => {
+    try { localStorage.setItem('hcom_cart', JSON.stringify(cart)); } catch (e) { }
+  }, [cart]);
+
+  React.useEffect(() => {
+    try { localStorage.setItem('hcom_orders', JSON.stringify(orders)); } catch (e) { }
+  }, [orders]);
 
   const handleCheckout = () => {
     if (cart.length === 0) return;
@@ -197,17 +221,17 @@ export default function App() {
   return (
     <div className={`app-container ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
       <Toaster position="top-right" />
-      
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        isOpen={isSidebarOpen} 
-        setIsOpen={setIsSidebarOpen} 
+
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
         userRole={currentUser.role}
       />
 
       <div className="main-content">
-        <Header 
+        <Header
           currentUser={currentUser}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -221,40 +245,40 @@ export default function App() {
         <main className="content-area">
           {activeTab === 'dashboard' && <DashboardView />}
           {activeTab === 'catalog' && (
-            <CatalogView 
-              products={PRODUCTS} 
-              onAddToCart={addToCart} 
-              onCheckout={handleCheckout} 
+            <CatalogView
+              products={PRODUCTS}
+              onAddToCart={addToCart}
+              onCheckout={handleCheckout}
             />
           )}
           {activeTab === 'orders' && (
-            <OrdersView 
-              orders={orders} 
+            <OrdersView
+              orders={orders}
               onUpdateStatus={updateOrderStatus}
               selectedOrderId={selectedOrderId}
               setSelectedOrderId={setSelectedOrderId}
             />
           )}
           {activeTab === 'operations' && (
-            <OSLOperations 
-              orders={orders} 
-              onUpdateStatus={updateOrderStatus} 
+            <OSLOperations
+              orders={orders}
+              onUpdateStatus={updateOrderStatus}
               onOrderClick={handleOrderClick}
             />
           )}
           {activeTab === 'warehouse' && (
-            <WarehouseManagement 
-              orders={orders} 
-              onUpdateStatus={updateOrderStatus} 
+            <WarehouseManagement
+              orders={orders}
+              onUpdateStatus={updateOrderStatus}
             />
           )}
-          
+
           {showOrderForm && (
-            <WHOOrderForm 
-              cart={cart} 
-              currentUser={currentUser} 
-              onSubmit={confirmOrder} 
-              onCancel={() => setShowOrderForm(false)} 
+            <WHOOrderForm
+              cart={cart}
+              currentUser={currentUser}
+              onSubmit={confirmOrder}
+              onCancel={() => setShowOrderForm(false)}
             />
           )}
 
@@ -266,7 +290,7 @@ export default function App() {
               <h2 className="text-2xl font-bold text-gray-400 italic">
                 This section has been consolidated into one of the 5 main tabs.
               </h2>
-              <button 
+              <button
                 onClick={() => setActiveTab('dashboard')}
                 className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl font-bold"
               >
