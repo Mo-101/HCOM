@@ -4,23 +4,23 @@ import { Search, PlusCircle, ArrowLeft, CheckCircle2, ShoppingCart, Minus, Plus,
 import { Product } from '../types';
 import { CURRENCIES } from '../constants';
 
-// Import product images
-import unfpaImg from '../../public/UNFPA__1_-removebg-preview.png';
-import nitrileGlovesImg from '../../public/Nitrile-examination.png';
-import iehkKitImg from '../../public/iehk-kit-illustration-removebg-preview.png';
-import safetyBootsImg from '../../public/Green-PVC-Plastic-Safety-Gumboots-with-Steel-Toe-Caps-Safety-Rain-Boots-removebg-preview.png';
-import medicalSuppliesImg from '../../public/ida-medical-supplies-open-removebg-preview.png';
-import isolationUnitImg from '../../public/isolation-transport-unit-removebg-preview.png';
-import biomedicalImg from '../../public/Biomedical-Consumables-removebg-preview.png';
-import coldChainFreezerImg from '../../public/cold-chain-freezer-removebg-preview.png';
-import freezerAucmaImg from '../../public/freezer-aucma-removebg-preview.png';
-import diagnosticTestKitImg from '../../public/diagnostic-test-kit-removebg-preview.png';
-import rotantaImg from '../../public/Rotanta-460_-removebg-preview.png';
-import fridgeImg from '../../public/fridge-removebg-preview.png';
-import concoeImg from '../../public/concoe-removebg-preview.png';
-import coverallImg from '../../public/Disposable-Safety-Type-5-6-Microporous-Coverall-Chemical-Protective-Clothing-removebg-preview.png';
-import respiratorImg from '../../public/Respirator_21-FFP2-Mask-1-removebg-preview.png';
-import traumaKitImg from '../../public/trauma-first-aid-kit-removebg-preview.png';
+// Product images from public directory
+const unfpaImg = '/UNFPA__1_-removebg-preview.png';
+const nitrileGlovesImg = '/Nitrile-examination.png';
+const iehkKitImg = '/iehk-kit-illustration-removebg-preview.png';
+const safetyBootsImg = '/Green-PVC-Plastic-Safety-Gumboots-with-Steel-Toe-Caps-Safety-Rain-Boots-removebg-preview.png';
+const medicalSuppliesImg = '/ida-medical-supplies-open-removebg-preview.png';
+const isolationUnitImg = '/isolation-transport-unit-removebg-preview.png';
+const biomedicalImg = '/Biomedical-Consumables-removebg-preview.png';
+const coldChainFreezerImg = '/cold-chain-freezer-removebg-preview.png';
+const freezerAucmaImg = '/freezer-aucma-removebg-preview.png';
+const diagnosticTestKitImg = '/diagnostic-test-kit-removebg-preview.png';
+const rotantaImg = '/Rotanta-460_-removebg-preview.png';
+const fridgeImg = '/fridge-removebg-preview.png';
+const concoeImg = '/concoe-removebg-preview.png';
+const coverallImg = '/Disposable-Safety-Type-5-6-Microporous-Coverall-Chemical-Protective-Clothing-removebg-preview.png';
+const respiratorImg = '/Respirator_21-FFP2-Mask-1-removebg-preview.png';
+const traumaKitImg = '/trauma-first-aid-kit-removebg-preview.png';
 
 // Map product IDs to imported images
 const productImages: Record<string, string> = {
